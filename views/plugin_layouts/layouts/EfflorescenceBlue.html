@@ -2,19 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
  <!-- Template Design by TheWebhub.com | http://www.thewebhub.com | Released for free under a Creative Commons Attribution-Share Alike 3.0 Philippines -->
  <head>
-
   <title>
    {{=response.title or request.application}}
   </title>
   {{response.files.append(URL(request.application,'static','plugin_layouts/layouts/EfflorescenceBlue/style.css'))}}
   {{response.files.append(URL('static','plugin_layouts/superfish.js'))}}
-  <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link href="{{=URL('static','css/myapp.css')}}" rel="stylesheet" type="text/css"/>
-  <link rel="stylesheet" href="{{=URL('static', 'font-awesome-4.6.3/css/font-awesome.min.css')}}">
-
   {{include 'web2py_ajax.html'}}
   <style>
 ul.web2py-menu-vertical { width: 150px; position: relative; top:1em; left:1em;  z-index:30; border:0; margin:0; padding: 0; list-style: none; text-decoration: none;}
@@ -24,12 +16,8 @@ div.flash { position: fixed; float: right; padding: 10px; top: 10px; right: 30px
 div.error { background-color: red; color: white; padding: 3px; }
 .auth_navbar { text-align:right; z-index:20; position: absolute; top: 2px; right:30px; border:0; padding:0 }
   </style>
- {{block head}}{{end}}
  </head>
  <body>
-   <script src="{{=URL('static','js/marked.min.js')}}"></script>
-  <script src="{{=URL('static','js/vue.min.js')}}"></script>
-  {{block bottomjs}}{{end}}
   <!-- start header -->
   {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
 
@@ -39,33 +27,9 @@ div.error { background-color: red; color: white; padding: 3px; }
    </h1>
   </div>
   <div id="menu">
-
-	<ul>
-		<li class="first">
-            <a href="{{=URL('default', 'index')}}">Home</a>
-        </li>
-		<li><a href="{{=URL('default', 'paybills')}}">Pay Bills</a></li>
-		<li><a href="{{=URL('default', 'Reminders')}}">Reminders</a></li>
-		<li><a href="{{=URL('default', 'contactinformation')}}">Contact Information</a></li>
-		<li><a href="{{=URL('default', 'chorechart')}}">Chore Chart</a></li>
-        <li><a href="{{=URL('default', 'discussionboard')}}">Discussion Board</a></li>
-	</ul>
-
-       <script>
-           jQuery.browser = {};
-        (function () {
-            jQuery.browser.msie = false;
-            jQuery.browser.version = 0;
-            if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
-                jQuery.browser.msie = true;
-                jQuery.browser.version = RegExp.$1;
-            }
-        })();
-
-           jQuery(document).ready(function(){
-               jQuery('ul.web2py-menu').superfish({delay:400});
-           })
-
+   {{=MENU(response.menu,_class='web2py-menu')}}
+    <script>
+      jQuery(document).ready(function(){jQuery('ul.web2py-menu').superfish({delay:400});});
     </script>
   </div>
   <div id="page">
@@ -77,8 +41,12 @@ div.error { background-color: red; color: white; padding: 3px; }
         {{=response.subtitle or '=response.subtitle'}}
        </h2>
        <ul>
-        <li> {{=response.intro or ''}}        </li>
-        <li> {{=response.intro2 or ''}}        </li>
+        <li>
+         Consectetuer adipiscing elit. Nam pede erat, porta eu, lobortis eget, tempus et, tellus. Etiam neque. Vivamus consequat lorem at nisl.
+        </li>
+        <li>
+         Nullam non wisi a sem semper eleifend. Donec mattis libero eget urna. Duis pretium velit ac mauris. Proin eu wisi suscipit nulla suscipit interdum.
+        </li>
        </ul>
       </div>
       <div id="content">

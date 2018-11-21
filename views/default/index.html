@@ -1,11 +1,26 @@
+{{
+response.title='EasyRoom'
+response.subtitle='Website Created by:'
+response.intro = "Kuan-Ying Wang"
+response.intro2 ="Yu-Shuo Li"
+}}
 {{extend 'layout.html'}}
 
-{{block head}}
-{{end}}
 
 <div class="main_content">
+    <h1>
+        Welcome to EasyRoom
+    </h1>
 
-  <!-- Here goes your main HTML code. -->
+    <h3>
+        Having roommates and housemates is a growing actuality of young adult life, and can be a great or mortifying experience. Our goal with EasyRoom is to provide a remedy for the latter, to allow people living together to have a more convenient way to communicate.
+    </h3>
+    <h3>
+        This site includes features like reminders, schedules, and other handy ways to communicate amongst roommates. Set up a chores list and rotation to remind housemates of their duties. EasyRoom is a way for roommates and housemates alike to live together more harmoniously.
+    </h3>
+    <div class="pic1">
+        <img src="{{=URL('static', 'images/easyroom1.jpg')}}" alt="happy housemates" width = "420" height ="250">
+    </div>
 
 </div>
 
