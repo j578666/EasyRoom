@@ -1,12 +1,19 @@
 # Here go your api methods.
 
+<<<<<<< HEAD
 @auth.requires_login()
+=======
+
+>>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
 @auth.requires_signature()
 def add_post():
     post_id = db.post.insert(
         post_title=request.vars.post_title,
         post_content=request.vars.post_content,
+<<<<<<< HEAD
         post_author=auth.user.email,
+=======
+>>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(post_id=post_id))
@@ -24,9 +31,12 @@ def get_post_list():
                 post_content=row.post_content,
                 post_author=row.post_author,
                 thumb = None,
+<<<<<<< HEAD
                 up_hover=None,
                 down_hover=None,
                 p_thumb_count=None,
+=======
+>>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
             ))
     else:
         # Logged in.
@@ -35,13 +45,17 @@ def get_post_list():
                                 db.thumb.on((db.thumb.post_id == db.post.id) & (db.thumb.user_email == auth.user.email)),
                             ],
                             orderby=~db.post.post_time)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
         for row in rows:
             results.append(dict(
                 id=row.post.id,
                 post_title=row.post.post_title,
                 post_content=row.post.post_content,
                 post_author=row.post.post_author,
+<<<<<<< HEAD
                 thumb=None if row.thumb.id is None else row.thumb.thumb_state,
                 up_hover=False,
                 down_hover=False,
@@ -139,4 +153,11 @@ def set_reply():
 
 
 
+=======
+                thumb = None if row.thumb.id is None else row.thumb.thumb_state,
+            ))
+    # For homogeneity, we always return a dictionary.
+    return response.json(dict(post_list=results))
+    
+>>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
 
