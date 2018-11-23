@@ -36,7 +36,6 @@ db.define_table('thumb',
                 Field('post_id', 'reference post'), # The thumbed post
                 Field('thumb_state'), # This can be 'u' for up or 'd' for down, or None for... None.
                 )
-<<<<<<< HEAD
 
 db.define_table('reply',
                 Field('post_id', 'reference post'),
@@ -45,5 +44,3 @@ db.define_table('reply',
                 Field('reply_time', 'datetime', default=get_current_time()),
                 )
 
-=======
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59

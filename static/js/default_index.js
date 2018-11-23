@@ -17,10 +17,7 @@ var app = function() {
 
     self.add_post = function () {
         // We disable the button, to prevent double submission.
-<<<<<<< HEAD
         self.toggle_form();
-=======
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
         $.web2py.disableElement($("#add-post"));
         var sent_title = self.vue.form_title; // Makes a copy 
         var sent_content = self.vue.form_content; // 
@@ -41,24 +38,17 @@ var app = function() {
                 var new_post = {
                     id: data.post_id,
                     post_title: sent_title,
-<<<<<<< HEAD
                     post_content: sent_content,
                     post_author: current_user,
                     down_hover: false,
                     up_hover: false,
-=======
-                    post_content: sent_content
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
                 };
                 self.vue.post_list.unshift(new_post);
                 // We re-enumerate the array.
                 self.process_posts();
             });
         // If you put code here, it is run BEFORE the call comes back.
-<<<<<<< HEAD
 
-=======
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
     };
 
     self.get_posts = function() {
@@ -82,7 +72,6 @@ var app = function() {
         enumerate(self.vue.post_list);
         // We initialize the smile status to match the like. 
         self.vue.post_list.map(function (e) {
-<<<<<<< HEAD
             Vue.set(e, '_up', e.thumb == 'u');
             Vue.set(e, '_down', e.thumb =='d');
             Vue.set(e, '_thumb_count', self.total_count(e));
@@ -100,20 +89,10 @@ var app = function() {
         // We initialize the smile status to match the like.
         self.vue.reply_list.map(function (e) {
 
-=======
-            // I need to use Vue.set here, because I am adding a new watched attribute
-            // to an object.  See https://vuejs.org/v2/guide/list.html#Object-Change-Detection-Caveats
-            // The code below is commented out, as we don't have smiles any more. 
-            // Replace it with the appropriate code for thumbs. 
-            // // Did I like it? 
-            // // If I do e._smile = e.like, then Vue won't see the changes to e._smile . 
-            // Vue.set(e, '_smile', e.like); 
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
         });
     };
 
 
-<<<<<<< HEAD
     self.total_count = function(e){
         let t_count = 0;
         if (e.p_thumb_count !=null){
@@ -376,8 +355,6 @@ var app = function() {
         }else return auth.user.email
     };
 
-=======
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -386,7 +363,6 @@ var app = function() {
         data: {
             form_title: "",
             form_content: "",
-<<<<<<< HEAD
             post_list: [],
             show_form: false,
             reply_list: [],
@@ -412,12 +388,6 @@ var app = function() {
             edit_reply: self.edit_reply,
             process_replies: self.process_replies,
             submit_reply_edit: self.submit_reply_edit,
-=======
-            post_list: []
-        },
-        methods: {
-            add_post: self.add_post,
->>>>>>> 616b920aa8c016ff6c0affd3f849ed1fef1e5f59
         }
 
     });
