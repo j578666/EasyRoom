@@ -1,0 +1,166 @@
+{{
+response.title='EasyRoom'
+response.subtitle='Discussion Board'
+response.intro = "This section serves as a discussion platform for the housemates."
+}}
+
+{{extend 'layout.html'}}
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
+    var get_post_list_url = "{{=URL('api', 'get_post_list')}}";
+    var is_logged_in = "{{='false' if auth.user is None else 'true'}}";
+    var set_thumb_url = "{{=URL('api', 'set_thumb', user_signature=True)}}";
+    var set_post_url = "{{=URL('api', 'set_post', user_signature=True)}}";
+    var current_user = "{{=None if auth.user is None else auth.user.email}}";
+    var get_reply_list_url = "{{=URL('api', 'get_reply_list', user_signature=True)}}";
+    var add_reply_url = "{{=URL('api', 'add_reply', user_signature=True)}}";
+    var set_reply_url = "{{=URL('api', 'set_reply', user_signature=True)}}";
+</script>
+{{end}}
+
+
+<div class="main_content">
+
+    <div id="vue-div" class="display:none">
+      <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
+
+     <button v-if="!show_form" v-on:click= "show_form=true"> Add Post</button>
+
+      <div v-if="show_form">
+
+        <!-- First, let's add a form to insert blog posts. -->
+      <div id="add_post" >
+        <div class="container form_row">
+          <div class="label">
+            Title:
+          </div>
+          <div class="form">
+            <input v-model="form_title" placeholder="Enter the post title"/>
+          </div>
+        </div>
+        <div class="container form_row">
+          <div class="label">
+            Content:
+          </div>
+          <div class="form">
+            <textarea v-model="form_content" placeholder="Enter the content of your post"></textarea>
+          </div>
+        </div>
+        <div class="container form_row"><div class="quarter"></div>
+          <div class="threequarters">
+            <div class="submit">
+              <button id="add-post" v-on:click="add_post">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     </div>   <!-- end show_form -->
+
+      <!-- Message in case there are no posts. -->
+      <div v-if="post_list.length === 0">There are no posts.</div>
+
+      <!-- We display the posts. -->
+      <div id="post_list">
+        <div class="post_div" v-for="post in post_list">
+          <div v-if="!post._editing">
+              <div>Title: ${post.post_title}</div>
+          </div>
+          <div v-if="post._editing">
+              Title: <textarea v-model="post.post_title"></textarea>
+          </div>
+          <div v-if="!post._editing">
+              <div>Content: ${post.post_content}</div>
+          </div>
+          <div v-if="post._editing">
+              Content: <textarea v-model="post.post_content"></textarea>
+          </div>
+
+          <div class="attributes">
+
+            <!-- Code for edit_post. -->
+              <div class = "edit_post">
+                <div v-if="current_user == post.post_author">
+                  <div v-if="!post._editing">
+                      <button class="small fa fa-pencil-square-o" v-on:click="edit_post(post._idx)">Edit</button>
+                  </div>
+                  <div v-if="post._editing">
+                      <button class = "small submit" v-on:click="submit_post_edit(post._idx, post.post_title, post.post_content)"> Done </button>
+                 </div>
+                </div>
+              </div>
+
+
+              <!-- Code for Thumbs. -->
+              <div class = "thumb">
+                   {{if auth.user is not None:}}
+                <span v-if="is_logged_in" class="toggle_up_thumb"
+                      v-on:mouseover="up_mouseover(post._idx)"
+                      v-on:mouseout="mouseout(post._idx);"
+                      v-on:click="up_click(post._idx)">
+                  <i v-if="post._up" class="fa fa-thumbs-up" v-bind:class="{changed: post.thumb == 'd' && post.up_hover}"></i>
+                  <i v-if="!post._up" class="fa fa-thumbs-o-up" v-bind:class="{changed: post.thumb == 'd' && post.down_hover}"></i>
+                </span>
+                 <span v-if="is_logged_in" class="toggle_down_thumb"
+                      v-on:mouseover="down_mouseover(post._idx)"
+                      v-on:mouseout="mouseout(post._idx)"
+                      v-on:click="down_click(post._idx);">
+                  <i v-if="post._down" class="fa fa-thumbs-down" v-bind:class="{changed: post.thumb == 'u' && post.down_hover}"></i>
+                  <i v-if="!post._down" class="fa fa-thumbs-o-down"v-bind:class="{changed: post.thumb == 'u' && post.up_hover}"></i>
+                </span>
+                  Thumb Count: ${post._thumb_count}
+                  {{pass}}
+              </div>
+
+
+                <!-- Code for replies.-->
+              <div class = "reply">
+                <div v-if="is_logged_in" >
+                   <button v-if="!post._show_reply" class = "small show_replies" v-on:click ="show_reply(post._idx)">Show Replies</button>
+                   <button v-if="post._show_reply" class = "small hide_replies" v-on:click ="hide_reply(post._idx)">Hide Replies</button>
+                   <button v-if="post._show_reply & !post._show_reply_form" class = "small add_replies" v-on:click="add_replys(post._idx)">Add Reply</button>
+
+                     <!-- First, let's add a form to insert reply. -->
+                 <div v-if="post._show_reply_form">
+                    <div class="container form_row">
+                        Reply Content:
+                      <div class="form">
+                        <textarea v-model="reply_content" placeholder="Enter the content of your reply"></textarea>
+                        <button v-if="post._show_reply_form" id ="add-reply" v-on:click="submit_reply(post._idx, reply_content)">Submit</button>
+                      </div>
+                    </div>
+                 </div>   <!-- end show_form -->
+
+                </div>
+                    <div v-if="post._show_reply" class ="display_reply">
+                        <div class="reply_div" v-for="reply in reply_list">
+                            <div v-if="reply.post_id == get_pid(post._idx)" class="reply">
+                                <div>Author: ${reply.reply_author}</div>
+                                <div v-if="!reply._editing">
+                                    Content: ${reply.reply_content}
+                                </div>
+                                <div v-if="reply._editing">
+                                  <textarea v-model="reply.reply_content"></textarea>
+                                </div>
+
+                                <div v-if="current_user == reply.reply_author">
+                                    <button v-if="!reply._editing" class="small edit_reply" v-on:click="edit_reply(reply._idx)">Edit</button>
+                                    <button v-if="reply._editing" class="small edit_done" v-on:click="submit_reply_edit(reply._idx, reply.reply_content)">Done</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+              </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</div>
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>
