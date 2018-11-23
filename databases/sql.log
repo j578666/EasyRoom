@@ -10783,3 +10783,33 @@ success!
 success!
 success!
 success!
+<<<<<<< HEAD
+=======
+timestamp: 2018-11-22T18:57:32.158000
+CREATE TABLE "web2py_session_ezroom"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "locked" CHAR(1),
+    "client_ip" CHAR(64),
+    "created_datetime" TIMESTAMP,
+    "modified_datetime" TIMESTAMP,
+    "unique_key" CHAR(64),
+    "session_data" BLOB
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+>>>>>>> 13c76431ad095e84849432fe78dfc2f868dbe4ab
