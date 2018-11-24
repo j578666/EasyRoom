@@ -3,7 +3,7 @@
 response.title='EasyRoom'
 response.subtitle='Calendar/Reminders'
 response.intro ="This section provides a calendar view for the housemates"
-response.intro2 ="Each housemate can add or edit/remove his or her agenda"
+response.intro2 ="Each housemate can add or edit/remove his or her agenda, green = you are the author, red = someone else's"
 }}
 <script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
 {{extend "layout.html"}}
@@ -20,6 +20,8 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda"
  <script>
  var add_reminder_url = "{{=URL('api', 'add_reminder', user_signature=True)}}";
  var get_reminder_list_url = "{{=URL('api', 'get_reminder_list', user_signature=True)}}";
+ var current_user = "{{=None if auth.user is None else auth.user.email}}";
+ var edit_reminder_name_url = "{{=URL('api', 'edit_reminder_name', user_signature=True)}}";
  </script>
 {{end}}
 
@@ -74,6 +76,7 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda"
           <div class="form">
             <textarea v-model="form_start_date" placeholder="Enter Start date "></textarea>
           </div>
+        </div>
 
         <div class="form" v-if="choose_time">
           <div class="label">
@@ -84,7 +87,7 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda"
           </div>
         </div>
 
-          <div class="form_row">
+          <div class="form_row" v-if="multi_day">
             <div class="label">
             End Date: YYYY-MM-DD
             <div class="form">
@@ -103,7 +106,7 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda"
         </div>
 
 
-        </div>
+
             <div class="final_button">
               <button id="add-reminder" v-on:click="add_reminder">Submit</button>
                 <button v-on:click="show_reminder_form=false;single_day=false;multi_day=false;choose_time=false;show_options=false;time_options=false">Cancel</button>

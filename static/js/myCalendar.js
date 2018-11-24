@@ -23,10 +23,32 @@ var calendar_app = function(){
         selectable:true,
         selectHelper:true,
         navLinks: true, // can click day/week names to navigate views
-        editable: true,
+        editable: false,
         eventLimit: true, // allow "more" link when too many events
+        eventClick: function(event, element) {
 
+            if(event.color== '#0edc08'){
+                var new_name = prompt('Event Title:', event.title);
+                self.edit_reminder_name(event.title, event.start, event.end, new_name);
+                event.title = new_name;
+              $('#calendar').fullCalendar('updateEvent', event);
+
+            }
+        }
     });
+
+    self.edit_reminder_name=function(title, start, end, new_title){
+        start=moment(start).format('YYYY-MM-DD');
+
+        $.post(edit_reminder_name_url,
+            // Data we are sending.
+            {
+                title: title,
+                start: start,
+                new_title: new_title,
+            })
+
+    };
 
 
     self.add_reminder =function(){
@@ -39,19 +61,40 @@ var calendar_app = function(){
      var sent_end_time = self.vue.form_end_time;
      var is_allday=true;
 
-     //if specified time
-     if(self.vue.form_start_time!= ""){
-         sent_start_date = sent_start_date.concat("T",sent_start_time);
-         sent_end_date = sent_end_date.concat("T",sent_end_time);
+
+
+
+     //if specified time for multi-day
+     if(self.vue.form_start_time!= "" && self.vue.form_end_date!=""){
+         //sent_start_date = sent_start_date.concat(" ",sent_start_time,":00");
+         //sent_end_date = sent_end_date.concat(" ",sent_end_time,":00");
          is_allday=false;
      }
+     //if specified time for single-day
+     else if(self.vue.form_start_time!= "" && self.vue.form_end_date == ""){
+         //sent_end_date = sent_start_date.concat(" ",sent_end_time,":00");
+         //sent_start_date = sent_start_date.concat(" ",sent_start_time,":00");
+         is_allday=false;
+     }
+     //if no specified time for single-day
+     else if(self.vue.form_start_time== "" && self.vue.form_end_date == ""){
+         //sent_start_date = sent_start_date.concat(" 00:00:00");
+         is_allday=true;
+     }
+     //if no specified time for multi-day
+     else if(self.vue.form_start_time== "" && self.vue.form_end_date == ""){
+         //sent_start_date = sent_start_date.concat(" 00:00:00");
+         is_allday=true;
+     }
+
 
      $.post(add_reminder_url,
             // Data we are sending.
             {
                 reminder_title: sent_title,
                 start_date: sent_start_date,
-                end_date: sent_end_date
+                end_date: sent_end_date,
+                allday:is_allday,
             },
             // What do we do when the post succeeds?
 
@@ -70,7 +113,6 @@ var calendar_app = function(){
                     start_date: sent_start_date,
                     allday:is_allday,
 
-                    //reminder_author: current_user,
                 };
 
                 self.vue.reminder_list.unshift(new_reminder);
@@ -81,6 +123,7 @@ var calendar_app = function(){
                 start: sent_start_date,
                 end: sent_end_date,
                 allDay:is_allday,
+                color: '#0edc08',
                 });
 
             });
@@ -105,13 +148,24 @@ var calendar_app = function(){
     };
 
     self.process_reminder = function(){
+     var author_color;
+     var editable = false;
      enumerate(self.vue.reminder_list);
      self.vue.reminder_list.map(function (e) {
+         if(current_user == e.reminder_author){
+             author_color = '#0edc08';
+             editable=true;
+         }else{
+             author_color = '#b91113';
+             editable=false;
+         }
          $('#calendar').fullCalendar('renderEvent', {
              title: e.reminder_title,
              start: e.start_date,
              end: e.end_date,
-             allDay:e.allDay,
+             allDay: e.allday,
+             color: author_color,
+             editable: editable,
          });
      });
     };
@@ -139,6 +193,7 @@ var calendar_app = function(){
         methods: {
             add_reminder: self.add_reminder,
             process_reminder: self.process_reminder,
+            edit_reminder_name: self.edit_reminder_name,
         }
 
  });

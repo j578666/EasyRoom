@@ -140,8 +140,9 @@ def add_reminder():
     reminder_id = db.reminder.insert(
         reminder_title=request.vars.reminder_title,
         start_date=request.vars.start_date,
-        end_date = request.vars.end_date,
+        end_date=request.vars.end_date,
         reminder_author=auth.user.email,
+        allday=request.vars.allday,
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(reminder_id=reminder_id))
@@ -156,7 +157,19 @@ def get_reminder_list():
             reminder_author=row.reminder_author,
             reminder_title=row.reminder_title,
             start_date=row.start_date,
-            end_date = row.end_date,
+            end_date=row.end_date,
+            allday=row.allday,
         ))
     return response.json(dict(reminder_list=results))
 
+@auth.requires_signature()
+def edit_reminder_name():
+    title = request.vars.title
+    start = request.vars.start
+    db.reminder.update_or_insert(
+        (db.reminder.reminder_title == title) & (db.reminder.start_date == start) &
+        (db.reminder.reminder_author == auth.user.email),
+        reminder_title=request.vars.new_title,
+    )
+
+    return "edit_reminder_name done"
