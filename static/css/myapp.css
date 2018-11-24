@@ -35,3 +35,6 @@ div.main_content div.display_reply div.reply{
   padding:5px;
   border: 1px black solid;
 }
+div.button_pad{
+	margin: 20px;
+}

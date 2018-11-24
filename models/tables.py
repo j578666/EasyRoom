@@ -44,3 +44,9 @@ db.define_table('reply',
                 Field('reply_time', 'datetime', default=get_current_time()),
                 )
 
+db.define_table('reminder',
+                Field('reminder_title'),
+                Field('reminder_author'),
+                Field('start_date'),
+                Field('end_date'),
+                )

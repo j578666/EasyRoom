@@ -5,28 +5,118 @@ response.subtitle='Calendar/Reminders'
 response.intro ="This section provides a calendar view for the housemates"
 response.intro2 ="Each housemate can add or edit/remove his or her agenda"
 }}
- <script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
- {{extend "layout.html"}}
-<head>
+<script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
+{{extend "layout.html"}}
+
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
 <link rel="stylesheet" href="{{=URL('static','css/fullcalendar.print.css')}}" media="print">
 <link rel="stylesheet" href="{{=URL('static','css/fullcalendar.css')}}">
 <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 <script src="{{=URL('static', 'js/fullcalendar.min.js')}}"></script>
 <script src="{{=URL('static', 'js/jquery-ui.min.js')}}"></script>
-<script src="{{=URL('static', 'js/myCalendar.js')}}"></script>
-
-</head>
-<button v-on:click="add_event"> Add Event</button>
-
-<div id="calendar">
-</div>
-
-<script>
 
 
+{{block head}}
+ <script>
+ var add_reminder_url = "{{=URL('api', 'add_reminder', user_signature=True)}}";
+ var get_reminder_list_url = "{{=URL('api', 'get_reminder_list', user_signature=True)}}";
+ </script>
+{{end}}
+
+<body>
+  <div id="vue-div">
+
+      <div class="button_pad">
+        <button  v-if="!show_reminder_form & !show_options & !time_options" v-on:click="show_options = true"> Add Reminder</button>
+      </div>
+
+      <div v-if="show_options & !show_reminder_form" >
+          Select one of the following reminder duration <br>
+          <input type="checkbox" class="reminder_type"  v-on:click="single_day=true; show_options=false;time_options=true"/> Single-Day<br>
+          <input type="checkbox" class="reminder_type" v-on:click="multi_day=true; show_options=false;time_options=true"/> Multi-Day <br>
+      </div>
+
+      <div v-if="time_options">
+          Do you want to specify time? (No -> All-day event) <br>
+          <input type="checkbox" v-on:click="choose_time = true; time_options=false; show_reminder_form=true;"/> Yes <br>
+          <input type="checkbox" v-on:click="choose_time=false; time_options=false; show_reminder_form=true;"/> No <br>
+      </div>
 
 
-</script>
+      <div v-if="show_reminder_form">
+
+        <!-- First, let's add a form to insert blog posts. -->
+      <div id="add_reminder" >
+        <div class="form_row">
+          <div class="label">
+            Title:
+          </div>
+          <div class="form">
+            <input v-model="form_title" placeholder="Enter Reminder Title"/>
+          </div>
+        </div>
+
+        <div class="form" v-if="single_day">
+          <div class="label">
+            Date: YYYY-MM-DD
+          </div>
+          <div class="form">
+            <textarea v-model="form_start_date" placeholder="Enter Start date "></textarea>
+          </div>
+        </div>
+
+
+
+        <div class="form" v-if="multi_day">
+          <div class="label">
+            Start Date: YYYY-MM-DD
+          </div>
+          <div class="form">
+            <textarea v-model="form_start_date" placeholder="Enter Start date "></textarea>
+          </div>
+
+        <div class="form" v-if="choose_time">
+          <div class="label">
+            Start Time: HH:MM
+          </div>
+          <div class="form">
+            <textarea v-model="form_start_time" placeholder="Enter Start time "></textarea>
+          </div>
+        </div>
+
+          <div class="form_row">
+            <div class="label">
+            End Date: YYYY-MM-DD
+            <div class="form">
+            <textarea v-model="form_end_date" placeholder="Enter End date "></textarea>
+          </div>
+            </div>
+        </div>
+
+        <div class="form" v-if="choose_time">
+          <div class="label">
+            End Time: HH:MM
+          </div>
+          <div class="form">
+            <textarea v-model="form_end_time" placeholder="Enter End time "></textarea>
+          </div>
+        </div>
+
+
+        </div>
+            <div class="final_button">
+              <button id="add-reminder" v-on:click="add_reminder">Submit</button>
+                <button v-on:click="show_reminder_form=false;single_day=false;multi_day=false;choose_time=false;show_options=false;time_options=false">Cancel</button>
+            </div>
+      </div>
+
+     </div>   <!-- end show_form -->
+  </div>
+      <div id="calendar"></div>
+</body>
+
+
+
 <style>
 
 
@@ -45,3 +135,5 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda"
 
 
 </style>
+
+<script src="{{=URL('static', 'js/myCalendar.js')}}"></script>

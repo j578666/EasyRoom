@@ -135,8 +135,28 @@ def set_reply():
 
 
 
+@auth.requires_signature()
+def add_reminder():
+    reminder_id = db.reminder.insert(
+        reminder_title=request.vars.reminder_title,
+        start_date=request.vars.start_date,
+        end_date = request.vars.end_date,
+        reminder_author=auth.user.email,
+    )
+    # We return the id of the new post, so we can insert it along all the others.
+    return response.json(dict(reminder_id=reminder_id))
 
 
-
-
+def get_reminder_list():
+    results = []
+    rows = db().select(db.reminder.ALL, orderby=~db.reminder.id)
+    for row in rows:
+        results.append(dict(
+            id=row.id,
+            reminder_author=row.reminder_author,
+            reminder_title=row.reminder_title,
+            start_date=row.start_date,
+            end_date = row.end_date,
+        ))
+    return response.json(dict(reminder_list=results))
 
