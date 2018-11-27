@@ -68,10 +68,22 @@ var calendar_app = function(){
 
     };
 
-
-
     self.add_chore =function(){
      self.vue.show_chore_form = false;
+
+     var checkboxes = document.getElementsByName("repeat");
+     var arrayVal = [];
+     for (var i= 0; i<checkboxes.length;i++)
+     {
+       if (checkboxes[i].checked === true)
+       {
+         arrayVal.push(checkboxes[i].value);
+       }
+     }
+
+     var dow_array = arrayVal;
+     arrayVal = [];
+
      $.web2py.disableElement($("#add-chore"));
      var sent_title = self.vue.form_title; // Makes a copy
 
@@ -79,6 +91,7 @@ var calendar_app = function(){
             // Data we are sending.
             {
                 chore_title: sent_title,
+                dow: dow_array.toString(),
             },
             // What do we do when the post succeeds?
 
@@ -90,16 +103,16 @@ var calendar_app = function(){
                 var new_chore = {
                     id: data.chore_id,
                     chore_title: sent_title,
+                    dow: dow_array,
                 };
 
                 self.vue.chore_list.unshift(new_chore);
                 // We re-enumerate the array.
 
                 $('#calendar').fullCalendar('renderEvent', {
-
+                start:'10:00',
                 title: sent_title,
-                //start: '10:00',
-                dow: [ 1, 4 ],
+                dow: dow_array,
                 }, true);
 
             });
@@ -126,9 +139,9 @@ var calendar_app = function(){
          $('#calendar').fullCalendar('renderEvent', {
              title: e.chore_title,
              start: '10:00',
-             dow: [ 1, 4 ],
-         }, true);
-     });
+             dow: (e.days_of_week).split(","),
+         }, true)
+     })
     };
 
 

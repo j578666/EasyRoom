@@ -54,5 +54,5 @@ db.define_table('reminder',
 
 db.define_table('chore',
                 Field('chore_title'),
-                Field('chore_repeat'),
+                Field('days_of_week'),
                 )

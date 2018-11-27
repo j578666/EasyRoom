@@ -26,15 +26,12 @@ response.intro = ""
 
 <body>
   <div id="vue-div">
-
       <div class="button_pad">
         <button  v-if="!show_chore_form" v-on:click="show_chore_form = true">Add Chore</button>
       </div>
 
-
       <div v-if="show_chore_form">
-
-      <div id="add_chore" >
+       <div id="add_chore" >
         <div class="form_row">
           <div class="label">
             Chore Name:
@@ -44,12 +41,24 @@ response.intro = ""
           </div>
         </div>
 
+           <div class = "chore_type" id="repeat_for">
+            Select the days to be repeated:<br>
+            <input type="checkbox" name= "repeat" value='0'/> Sunday
+            <input type="checkbox" name= "repeat" value='1'/> Monday
+            <input type="checkbox" name= "repeat" value='2'/> Tuesday
+            <input type="checkbox" name= "repeat" value='3'/> Wednesday<br>
+            <input type="checkbox" name= "repeat" value='4'/> Thursday
+            <input type="checkbox" name= "repeat" value='5'/> Friday
+            <input type="checkbox" name= "repeat" value='6'/> Saturday
+           </div>
+
+
 
             <div class="final_button">
               <button id="add-chore" v-on:click="add_chore">Submit</button>
               <button v-on:click="show_chore_form=false;">Cancel</button>
             </div>
-      </div>
+       </div>
 
      </div>   <!-- end show_form -->
 

@@ -152,6 +152,7 @@ def add_reminder():
 def add_chore():
     chore_id = db.chore.insert(
         chore_title=request.vars.chore_title,
+        days_of_week=request.vars.dow,
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(chore_id=chore_id))
@@ -179,6 +180,7 @@ def get_chore_list():
         results.append(dict(
             id=row.id,
             chore_title=row.chore_title,
+            days_of_week=row.days_of_week,
         ))
     return response.json(dict(chore_list=results))
 
