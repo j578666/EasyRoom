@@ -4,11 +4,60 @@ response.subtitle='Chore Chart'
 response.intro = ""
 }}
 
-{{extend 'layout.html'}}
-<head>
-    <meta charset="UTF-8">
-    <h1>Chore Chart</h1>
-</head>
-<body>
+<script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
+{{extend "layout.html"}}
 
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.print.css')}}" media="print">
+<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.css')}}">
+<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+<script src="{{=URL('static', 'js/fullcalendar.min.js')}}"></script>
+<script src="{{=URL('static', 'js/jquery-ui.min.js')}}"></script>
+
+
+
+{{block head}}
+ <script>
+ var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
+ var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";
+ var current_user = "{{=None if auth.user is None else auth.user.email}}";
+ </script>
+{{end}}
+
+<body>
+  <div id="vue-div">
+
+      <div class="button_pad">
+        <button  v-if="!show_chore_form" v-on:click="show_chore_form = true">Add Chore</button>
+      </div>
+
+
+      <div v-if="show_chore_form">
+
+      <div id="add_chore" >
+        <div class="form_row">
+          <div class="label">
+            Chore Name:
+          </div>
+          <div class="form">
+            <input v-model="form_title" placeholder="Enter Chore Name"/>
+          </div>
+        </div>
+
+
+            <div class="final_button">
+              <button id="add-chore" v-on:click="add_chore">Submit</button>
+              <button v-on:click="show_chore_form=false;">Cancel</button>
+            </div>
+      </div>
+
+     </div>   <!-- end show_form -->
+
+  </div>
+      <div id="calendar"></div>
 </body>
+
+
+
+
+<script src="{{=URL('static', 'js/choreChart.js')}}"></script>

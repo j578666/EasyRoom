@@ -51,3 +51,8 @@ db.define_table('reminder',
                 Field('end_date'),
                 Field('allday')
                 )
+
+db.define_table('chore',
+                Field('chore_title'),
+                Field('chore_repeat'),
+                )

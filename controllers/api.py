@@ -148,6 +148,15 @@ def add_reminder():
     return response.json(dict(reminder_id=reminder_id))
 
 
+@auth.requires_signature()
+def add_chore():
+    chore_id = db.chore.insert(
+        chore_title=request.vars.chore_title,
+    )
+    # We return the id of the new post, so we can insert it along all the others.
+    return response.json(dict(chore_id=chore_id))
+
+
 def get_reminder_list():
     results = []
     rows = db().select(db.reminder.ALL, orderby=~db.reminder.id)
@@ -162,6 +171,19 @@ def get_reminder_list():
         ))
     return response.json(dict(reminder_list=results))
 
+
+def get_chore_list():
+    results = []
+    rows = db().select(db.chore.ALL, orderby=~db.chore.id)
+    for row in rows:
+        results.append(dict(
+            id=row.id,
+            chore_title=row.chore_title,
+        ))
+    return response.json(dict(chore_list=results))
+
+
+
 @auth.requires_signature()
 def edit_reminder_name():
     title = request.vars.title
@@ -173,3 +195,5 @@ def edit_reminder_name():
     )
 
     return "edit_reminder_name done"
+
+

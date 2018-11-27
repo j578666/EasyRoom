@@ -124,7 +124,7 @@ var calendar_app = function(){
                 end: sent_end_date,
                 allDay:is_allday,
                 color: '#0edc08',
-                });
+                }, true);
 
             });
             self.vue.single_day = false;
@@ -166,7 +166,7 @@ var calendar_app = function(){
              allDay: e.allday,
              color: author_color,
              editable: editable,
-         });
+         }, true);
      });
     };
 
