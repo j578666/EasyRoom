@@ -13317,6 +13317,19 @@ success!
 success!
 success!
 success!
+<<<<<<< HEAD
+=======
+timestamp: 2018-11-26T16:48:45.789000
+CREATE TABLE "web2py_session_easyroom1"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "locked" CHAR(1),
+    "client_ip" CHAR(64),
+    "created_datetime" TIMESTAMP,
+    "modified_datetime" TIMESTAMP,
+    "unique_key" CHAR(64),
+    "session_data" BLOB
+);
+>>>>>>> ad277d0b804e369930a9c7ce3adb196ccb46a335
 success!
 success!
 success!
@@ -13350,3 +13363,47 @@ success!
 success!
 success!
 success!
+<<<<<<< HEAD
+=======
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2018-11-26T17:13:30.677000
+ALTER TABLE "auth_user" ADD "House" CHAR(512);
+timestamp: 2018-11-26T17:13:30.705000
+ALTER TABLE "auth_user" ADD "Age" CHAR(512);
+timestamp: 2018-11-26T17:13:30.746000
+ALTER TABLE "auth_user" ADD "Phone" CHAR(512);
+timestamp: 2018-11-26T17:13:30.770000
+ALTER TABLE "auth_user" ADD "Invitation" CHAR(512);
+success!
+success!
+success!
+success!
+timestamp: 2018-11-26T17:20:37.658000
+ALTER TABLE "auth_user" ADD "PayPalMe" CHAR(512);
+timestamp: 2018-11-26T17:20:37.709000
+ALTER TABLE "auth_user" ADD "HouseName" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+>>>>>>> ad277d0b804e369930a9c7ce3adb196ccb46a335
