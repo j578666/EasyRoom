@@ -13367,3 +13367,37 @@ success!
 success!
 success!
 success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2018-11-26T17:13:30.677000
+ALTER TABLE "auth_user" ADD "House" CHAR(512);
+timestamp: 2018-11-26T17:13:30.705000
+ALTER TABLE "auth_user" ADD "Age" CHAR(512);
+timestamp: 2018-11-26T17:13:30.746000
+ALTER TABLE "auth_user" ADD "Phone" CHAR(512);
+timestamp: 2018-11-26T17:13:30.770000
+ALTER TABLE "auth_user" ADD "Invitation" CHAR(512);
+success!
+success!
+success!
+success!
+timestamp: 2018-11-26T17:20:37.658000
+ALTER TABLE "auth_user" ADD "PayPalMe" CHAR(512);
+timestamp: 2018-11-26T17:20:37.709000
+ALTER TABLE "auth_user" ADD "HouseName" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

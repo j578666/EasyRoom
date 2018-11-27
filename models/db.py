@@ -66,6 +66,14 @@ service = Service()
 plugins = PluginManager()
 
 # create all tables needed by auth if not custom tables
+#cust auth
+auth.settings.extra_fields['auth_user']= [
+  Field('Phone', requires=IS_NOT_EMPTY()),
+  Field('HouseName', requires=IS_NOT_EMPTY()),
+  Field('Invitation'),
+  Field('PayPalMe',  requires=IS_NOT_EMPTY())]
+
+
 auth.define_tables(username=False, signature=False)
 
 # configure email
@@ -80,6 +88,7 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+
 
 # More API examples for controllers:
 #
