@@ -19,7 +19,7 @@ var calendar_app = function(){
         center: 'title',
         right: 'basicWeek,listWeek,month',
       },
-        defaultView: 'month',
+        defaultView: 'basicWeek',
         selectable:true,
         selectHelper:true,
         navLinks: true, // can click day/week names to navigate views
@@ -28,15 +28,24 @@ var calendar_app = function(){
         displayEventTime: false,
         eventClick: function(event, element) {
 
+            event.color = '#0eb008';
+            event.title = 'complete';
+            $('#calendar').fullCalendar('updateEvent', event);
+
+            /*
         var answer = confirm("Chore Completed?");
         if (answer) {
-            //some code
+            console.log("complete");
+            event.color = '#0eb008';
+            event.title = 'complete';
+            $('#calendar').fullCalendar('updateEvent', event);
+
         }
         else {
             //some code
         }
         $('#calendar').fullCalendar('updateEvent', event);
-
+        */
         }
     });
 

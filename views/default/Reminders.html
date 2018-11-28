@@ -3,7 +3,9 @@
 response.title='EasyRoom'
 response.subtitle='Calendar/Reminders'
 response.intro ="This section provides a calendar view for the housemates"
-response.intro2 ="Each housemate can add or edit/remove his or her agenda, green = you are the author, red = someone else's"
+response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
+"GREEN reminder means you are the author, RED means it's someone else's. " \
+"To Remove a reminder, click on the event and enter a blank name."
 }}
 <script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
 {{extend "layout.html"}}
@@ -22,6 +24,7 @@ response.intro2 ="Each housemate can add or edit/remove his or her agenda, green
  var get_reminder_list_url = "{{=URL('api', 'get_reminder_list', user_signature=True)}}";
  var current_user = "{{=None if auth.user is None else auth.user.email}}";
  var edit_reminder_name_url = "{{=URL('api', 'edit_reminder_name', user_signature=True)}}";
+ var remove_reminder_url = "{{=URL('api', 'remove_reminder', user_signature=True)}}";
  </script>
 {{end}}
 

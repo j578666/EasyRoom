@@ -27,17 +27,22 @@ var calendar_app = function(){
         eventLimit: true, // allow "more" link when too many events
         eventClick: function(event, element) {
 
-            if(event.color== '#0edc08'){
+            if(event.color =='#0edc08'){
                 var new_name = prompt('Event Title:', event.title);
-                self.edit_reminder_name(event.title, event.start, event.end, new_name);
-                event.title = new_name;
-              $('#calendar').fullCalendar('updateEvent', event);
-
+                if(new_name) {
+                    self.edit_reminder_name(event.title, event.start, new_name);
+                    event.title = new_name;
+                    $('#calendar').fullCalendar('updateEvent', event);
+                }else if (new_name == ""){ //delete event
+                    self.remove_reminder(event.title, event.start);
+                    $('#calendar').fullCalendar( 'removeEvents', event._id );
+                }
             }
+
         }
     });
 
-    self.edit_reminder_name=function(title, start, end, new_title){
+    self.edit_reminder_name=function(title, start, new_title){
         start=moment(start).format('YYYY-MM-DD');
 
         $.post(edit_reminder_name_url,
@@ -134,6 +139,17 @@ var calendar_app = function(){
 
     };
 
+    self.remove_reminder = function(title, start){
+        start=moment(start).format('YYYY-MM-DD');
+        $.post(remove_reminder_url,
+            // Data we are sending.
+            {
+                title: title,
+                start: start,
+            })
+    };
+
+
     self.get_reminders = function() {
         $.getJSON(get_reminder_list_url,
             function(data) {
@@ -194,6 +210,7 @@ var calendar_app = function(){
             add_reminder: self.add_reminder,
             process_reminder: self.process_reminder,
             edit_reminder_name: self.edit_reminder_name,
+            remove_reminder: self.remove_reminder,
         }
 
  });

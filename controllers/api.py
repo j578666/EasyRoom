@@ -198,4 +198,12 @@ def edit_reminder_name():
 
     return "edit_reminder_name done"
 
+@auth.requires_signature()
+def remove_reminder():
+    title = request.vars.title
+    start = request.vars.start
+    db((db.reminder.reminder_title == title) & (db.reminder.start_date == start)).delete()
+
+    return "removed reminder"
+
 
