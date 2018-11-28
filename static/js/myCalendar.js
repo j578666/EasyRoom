@@ -28,13 +28,20 @@ var calendar_app = function(){
         eventClick: function(event, element) {
 
             if(event.color =='#0edc08'){
+                console.log(event.is_repeat);
                 var new_name = prompt('Event Title:', event.title);
                 if(new_name) {
-                    self.edit_reminder_name(event.title, event.start, new_name);
+                    self.edit_reminder_name(event.title, event.start, new_name, event.allDay, event.is_repeat);
+
                     event.title = new_name;
                     $('#calendar').fullCalendar('updateEvent', event);
+                    if(event.is_repeat === 'true'){
+                        window.location.reload();
+                    }
+
+
                 }else if (new_name == ""){ //delete event
-                    self.remove_reminder(event.title, event.start);
+                    self.remove_reminder(event.title, event.start, event.allDay, event.is_repeat);
                     $('#calendar').fullCalendar( 'removeEvents', event._id );
                 }
             }
@@ -42,21 +49,32 @@ var calendar_app = function(){
         }
     });
 
-    self.edit_reminder_name=function(title, start, new_title){
-        start=moment(start).format('YYYY-MM-DD');
+    self.edit_reminder_name=function(title, start, new_title, is_allday, repeat){
 
+
+        if(is_allday && repeat==='false') {
+            start = moment(start).format('YYYY-MM-DD');
+        }else if(repeat ==='true'){
+            start = moment(start).format('HH:mm');
+
+        }else if (!is_allday) {
+            start = moment(start).format('YYYY-MM-DD HH:mm');
+        }
         $.post(edit_reminder_name_url,
             // Data we are sending.
             {
-                title: title,
-                start: start,
-                new_title: new_title,
+                title: title.toString(),
+                start: start.toString(),
+                new_title: new_title.toString(),
             })
 
     };
 
 
     self.add_reminder =function(){
+
+        console.log(self.vue.repeat_b);
+
      self.vue.show_reminder_form = false;
      $.web2py.disableElement($("#add-reminder"));
      var sent_title = self.vue.form_title; // Makes a copy
@@ -64,43 +82,52 @@ var calendar_app = function(){
      var sent_end_date = self.vue.form_end_date;
      var sent_start_time = self.vue.form_start_time;
      var sent_end_time = self.vue.form_end_time;
-     var is_allday=true;
 
+     if(self.vue.choose_time){
+       sent_start_date = sent_start_date + " " + sent_start_time;
+       sent_end_date = sent_end_date + " " + sent_end_time;
+     }
 
+     if(self.vue.repeat_b){
+       sent_start_date =sent_start_time;
+       sent_end_date =sent_end_time;
+     }
+     var is_allday;
 
-
-     //if specified time for multi-day
-     if(self.vue.form_start_time!= "" && self.vue.form_end_date!=""){
-         //sent_start_date = sent_start_date.concat(" ",sent_start_time,":00");
-         //sent_end_date = sent_end_date.concat(" ",sent_end_time,":00");
+     //if specified time
+     if(self.vue.form_start_time!= ""){
          is_allday=false;
      }
-     //if specified time for single-day
-     else if(self.vue.form_start_time!= "" && self.vue.form_end_date == ""){
-         //sent_end_date = sent_start_date.concat(" ",sent_end_time,":00");
-         //sent_start_date = sent_start_date.concat(" ",sent_start_time,":00");
-         is_allday=false;
-     }
-     //if no specified time for single-day
-     else if(self.vue.form_start_time== "" && self.vue.form_end_date == ""){
-         //sent_start_date = sent_start_date.concat(" 00:00:00");
-         is_allday=true;
-     }
-     //if no specified time for multi-day
-     else if(self.vue.form_start_time== "" && self.vue.form_end_date == ""){
-         //sent_start_date = sent_start_date.concat(" 00:00:00");
+     //all day event
+     else {
          is_allday=true;
      }
 
+         var checkboxes = document.getElementsByName("repeat");
+         var arrayVal = [];
+         for (var i= 0; i<checkboxes.length;i++)
+         {
+           if (checkboxes[i].checked === true)
+           {
+             arrayVal.push(checkboxes[i].value);
+           }
+         }
 
-     $.post(add_reminder_url,
-            // Data we are sending.
-            {
-                reminder_title: sent_title,
-                start_date: sent_start_date,
-                end_date: sent_end_date,
-                allday:is_allday,
-            },
+         var dow_array = arrayVal;
+         if(sent_start_date === ''){
+             sent_start_date = "00:00";
+         }
+
+       $.post(add_reminder_url,
+         // Data we are sending.
+         {
+             reminder_title: sent_title,
+             start_date: sent_start_date,
+             end_date: sent_end_date,
+             allday:is_allday,
+             dow: dow_array.toString(),
+             repeat_bool: self.vue.repeat_b,
+         },
             // What do we do when the post succeeds?
 
             function (data) {
@@ -109,38 +136,73 @@ var calendar_app = function(){
                 self.vue.form_title="";
                 self.vue.form_start_date="";
                 self.vue.form_end_date="";
+                self.vue.form_start_time ="";
+                self.vue.form_end_time ="";
                 // Adds the reply to the list of replies.
 
+                var new_reminder;
+                if(data.repeat_bool){
+                     new_reminder = {
+                        id: data.reminder_id,
+                        reminder_title: sent_title,
+                        start_date: sent_start_date,
+                        allday: is_allday,
+                        dow: dow_array,
+                        is_repeat: true,
 
-                var new_reminder = {
-                    id: data.reminder_id,
-                    reminder_title: sent_title,
-                    start_date: sent_start_date,
-                    allday:is_allday,
-
-                };
-
+                    };
+                }else {
+                     new_reminder = {
+                        id: data.reminder_id,
+                        reminder_title: sent_title,
+                        start_date: sent_start_date,
+                        allday: is_allday,
+                        is_repeat: false,
+                    };
+                }
                 self.vue.reminder_list.unshift(new_reminder);
-                // We re-enumerate the array.
-                //self.process_reminder();
-                $('#calendar').fullCalendar('renderEvent', {
-                title: sent_title,
-                start: sent_start_date,
-                end: sent_end_date,
-                allDay:is_allday,
-                color: '#0edc08',
-                }, true);
 
+                if(data.repeat_bool){
+                    $('#calendar').fullCalendar('renderEvent', {
+                        title: sent_title,
+                        start: sent_start_date,
+                        end: sent_end_date,
+                        allDay: is_allday,
+                        color: '#0edc08',
+                        dow: dow_array,
+                        is_repeat: true,
+
+                    }, true);
+
+                }else {
+                    $('#calendar').fullCalendar('renderEvent', {
+                        title: sent_title,
+                        start: sent_start_date,
+                        end: sent_end_date,
+                        allDay: is_allday,
+                        color: '#0edc08',
+                        is_repeat: false,
+                    }, true);
+
+                }
             });
             self.vue.single_day = false;
             self.vue.multi_day = false;
             self.vue.choose_time=false;
             self.vue.time_options=false;
+            self.vue.repeat_b= false;
 
     };
 
-    self.remove_reminder = function(title, start){
-        start=moment(start).format('YYYY-MM-DD');
+    self.remove_reminder = function(title, start, is_allday, repeat){
+        if(is_allday && repeat==='false') {
+            start = moment(start).format('YYYY-MM-DD');
+        }else if(repeat ==='true'){
+            start = moment(start).format('HH:mm');
+
+        }else if (!is_allday) {
+            start = moment(start).format('YYYY-MM-DD HH:mm');
+        }
         $.post(remove_reminder_url,
             // Data we are sending.
             {
@@ -153,10 +215,7 @@ var calendar_app = function(){
     self.get_reminders = function() {
         $.getJSON(get_reminder_list_url,
             function(data) {
-                // I am assuming here that the server gives me a nice list
-                // of posts, all ready for display.
                 self.vue.reminder_list = data.reminder_list;
-                // Post-processing.
                 self.process_reminder();
                 console.log("I got my reminder list");
             }
@@ -175,14 +234,30 @@ var calendar_app = function(){
              author_color = '#b91113';
              editable=false;
          }
-         $('#calendar').fullCalendar('renderEvent', {
-             title: e.reminder_title,
-             start: e.start_date,
-             end: e.end_date,
-             allDay: e.allday,
-             color: author_color,
-             editable: editable,
-         }, true);
+
+         if(e.repeat_bool){
+             $('#calendar').fullCalendar('renderEvent', {
+                 title: e.reminder_title,
+                 start: e.start_date,
+                 end: e.end_date,
+                 allDay: e.allday,
+                 color: author_color,
+                 editable: editable,
+                 dow: e.days_of_week,
+                 is_repeat: e.repeat_bool,
+             }, true);
+
+         }else {
+             $('#calendar').fullCalendar('renderEvent', {
+                 title: e.reminder_title,
+                 start: e.start_date,
+                 end: e.end_date,
+                 allDay: e.allday,
+                 color: author_color,
+                 editable: editable,
+                 is_repeat: e.repeat_bool,
+             }, true);
+         }
      });
     };
 
@@ -204,6 +279,7 @@ var calendar_app = function(){
             single_day:false,
             choose_time: false,
             time_options: false,
+            repeat_b:false,
 
         },
         methods: {
@@ -220,8 +296,8 @@ var calendar_app = function(){
 };
 
 
-var c_APP = null;
+var APP = null;
 
-jQuery(function(){c_APP = calendar_app();});
+jQuery(function(){APP = calendar_app();});
 
 

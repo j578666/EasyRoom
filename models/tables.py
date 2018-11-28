@@ -49,7 +49,9 @@ db.define_table('reminder',
                 Field('reminder_author'),
                 Field('start_date'),
                 Field('end_date'),
-                Field('allday')
+                Field('allday'),
+                Field('days_of_week'),
+                Field('repeat_bool'),
                 )
 
 db.define_table('chore',

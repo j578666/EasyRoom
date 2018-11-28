@@ -25,27 +25,29 @@ var calendar_app = function(){
         navLinks: true, // can click day/week names to navigate views
         editable: false,
         eventLimit: true, // allow "more" link when too many events
-        displayEventTime: false,
+        //displayEventTime: false,
         eventClick: function(event, element) {
 
-            event.color = '#0eb008';
-            event.title = 'complete';
-            $('#calendar').fullCalendar('updateEvent', event);
-
-            /*
         var answer = confirm("Chore Completed?");
         if (answer) {
-            console.log("complete");
-            event.color = '#0eb008';
-            event.title = 'complete';
-            $('#calendar').fullCalendar('updateEvent', event);
+            $('#calendar').fullCalendar( 'removeEvents',
+                function(event){
+                  var date_string = ((event.start)._d).toString();
+                  var parse_date = date_string.split(" ");
 
+                  var chore_date = parse_date[1] + parse_date[2]+ parse_date[3];
+                  var today_string = (moment()._d).toString();
+                  var parse_today = today_string.split(" ");
+                  var today = parse_today[1]+parse_today[2]+parse_today[3];
+
+                  console.log(chore_date);
+                  console.log(today);
+                  console.log (chore_date == today);
+                  return chore_date == today;
+
+                } );
         }
-        else {
-            //some code
-        }
-        $('#calendar').fullCalendar('updateEvent', event);
-        */
+
         }
     });
 
@@ -64,6 +66,21 @@ var calendar_app = function(){
     };
     */
 
+    self.should_delete = function (event){
+      var date_string = ((event.start)._d).toString();
+      var parse_date = date_string.split(" ");
+
+      var chore_date = parse_date[1] + parse_date[2]+ parse_date[3];
+      var today_string = (moment()._d).toString();
+      var parse_today = today_string.split(" ");
+      var today = parse_today[1]+parse_today[2]+parse_today[3];
+
+      console.log(chore_date);
+      console.log(today);
+      console.log (chore_date == today);
+      return chore_date == today;
+
+    };
 
 
     self.add_chore_test = function (){
@@ -119,7 +136,8 @@ var calendar_app = function(){
                 // We re-enumerate the array.
 
                 $('#calendar').fullCalendar('renderEvent', {
-                start:'10:00',
+                start:'2018-11-11',
+                end:'11:00',
                 title: sent_title,
                 dow: dow_array,
                 }, true);
@@ -146,8 +164,8 @@ var calendar_app = function(){
      self.vue.chore_list.map(function (e) {
 
          $('#calendar').fullCalendar('renderEvent', {
+             start:'10:00',
              title: e.chore_title,
-             start: '10:00',
              dow: (e.days_of_week).split(","),
          }, true)
      })
@@ -171,6 +189,7 @@ var calendar_app = function(){
             add_chore: self.add_chore,
             process_chore: self.process_chore,
             get_chores: self.get_chores,
+            should_delete: self.should_delete,
 
         }
 

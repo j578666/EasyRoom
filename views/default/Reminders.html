@@ -12,7 +12,7 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
 
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <link rel="stylesheet" href="{{=URL('static','css/fullcalendar.print.css')}}" media="print">
-<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.css')}}">
+<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.min.css')}}">
 <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 <script src="{{=URL('static', 'js/fullcalendar.min.js')}}"></script>
 <script src="{{=URL('static', 'js/jquery-ui.min.js')}}"></script>
@@ -39,6 +39,8 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
           Select one of the following reminder duration <br>
           <input type="checkbox" class="reminder_type"  v-on:click="single_day=true; show_options=false;time_options=true"/> Single-Day<br>
           <input type="checkbox" class="reminder_type" v-on:click="multi_day=true; show_options=false;time_options=true"/> Multi-Day <br>
+          <input type="checkbox" class="reminder_type" v-on:click="repeat_b=true; show_options=false;time_options=true"/> Repeat for Days of Week <br>
+
       </div>
 
       <div v-if="time_options">
@@ -50,7 +52,6 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
 
       <div v-if="show_reminder_form">
 
-        <!-- First, let's add a form to insert blog posts. -->
       <div id="add_reminder" >
         <div class="form_row">
           <div class="label">
@@ -69,8 +70,6 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
             <textarea v-model="form_start_date" placeholder="Enter Start date "></textarea>
           </div>
         </div>
-
-
 
         <div class="form" v-if="multi_day">
           <div class="label">
@@ -107,7 +106,18 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
             <textarea v-model="form_end_time" placeholder="Enter End time "></textarea>
           </div>
         </div>
-
+        <div class = "select repeat" v-if="repeat_b">
+           <div class = "chore_type" id="repeat_for">
+            Select the days to be repeated:<br>
+            <input type="checkbox" name= "repeat" value='0'/> Sunday
+            <input type="checkbox" name= "repeat" value='1'/> Monday
+            <input type="checkbox" name= "repeat" value='2'/> Tuesday
+            <input type="checkbox" name= "repeat" value='3'/> Wednesday<br>
+            <input type="checkbox" name= "repeat" value='4'/> Thursday
+            <input type="checkbox" name= "repeat" value='5'/> Friday
+            <input type="checkbox" name= "repeat" value='6'/> Saturday
+           </div>
+        </div>
 
 
             <div class="final_button">

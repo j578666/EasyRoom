@@ -137,15 +137,18 @@ def set_reply():
 
 @auth.requires_signature()
 def add_reminder():
+    repeat_bool = request.vars.repeat_bool
     reminder_id = db.reminder.insert(
         reminder_title=request.vars.reminder_title,
         start_date=request.vars.start_date,
         end_date=request.vars.end_date,
         reminder_author=auth.user.email,
         allday=request.vars.allday,
+        days_of_week=request.vars.dow,
+        repeat_bool=request.vars.repeat_bool,
     )
     # We return the id of the new post, so we can insert it along all the others.
-    return response.json(dict(reminder_id=reminder_id))
+    return response.json(dict(reminder_id=reminder_id, repeat_bool=repeat_bool))
 
 
 @auth.requires_signature()
@@ -169,6 +172,8 @@ def get_reminder_list():
             start_date=row.start_date,
             end_date=row.end_date,
             allday=row.allday,
+            days_of_week=row.days_of_week,
+            repeat_bool=row.repeat_bool,
         ))
     return response.json(dict(reminder_list=results))
 
