@@ -57,5 +57,13 @@ db.define_table('reminder',
 db.define_table('chore',
                 Field('chore_author'),
                 Field('chore_title'),
-                Field('checked_day'),
+                Field('sun'),
+                Field('mon'),
+                Field('tue'),
+                Field('wed'),
+                Field('thu'),
+                Field('fri'),
+                Field('sat'),
+                Field('for_clear', default="clear"), #use for clearing the chart
+
                 )

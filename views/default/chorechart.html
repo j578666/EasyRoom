@@ -1,8 +1,10 @@
+<!DOCTYPE html>
 {{
 response.title='EasyRoom'
 response.subtitle='Chore Chart'
 response.intro = "A chore chart for the house; house member can add chore to the chart."
-response.intro2= "Member check the corresponding checkbox when a chore is complete."
+response.intro2= "Users can edit/delete the chores they added by clicking on the chore they want to edit/delete." \
+"   Enter an empty name to delete. Each cell of the chart can be mark complete by clicking the cell"
 }}
 
 {{extend "layout.html"}}
@@ -10,10 +12,15 @@ response.intro2= "Member check the corresponding checkbox when a chore is comple
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <link rel="stylesheet" href="{{=URL('static','css/stupid.css')}}">
 <link rel="stylesheet" href="{{=URL('static','css/chore_chart.css')}}">
+<link rel="stylesheet" href="{{=URL('static','font-awesome-4.6.3/css/font-awesome.css')}}">
 
 <script>
  var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
  var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";
+ var update_chore_url = "{{=URL('api', 'update_chore', user_signature=True)}}";
+ var clear_chart_url = "{{=URL('api', 'clear_chart', user_signature=True)}}";
+ var edit_chore_title_url = "{{=URL('api', 'edit_chore_title', user_signature=True)}}";
+ var delete_chore_url = "{{=URL('api', 'delete_chore', user_signature=True)}}";
  var current_user = "{{=None if auth.user is None else auth.user.email}}";
 </script>
 {{end}}
@@ -42,34 +49,20 @@ response.intro2= "Member check the corresponding checkbox when a chore is comple
             <div v-if="chore_list.length === 0">There are no chores.</div>
 
             <div class="chore_list">
-                <tr v-for="chore in chore_list"><th>${chore.chore_title}</th>
-                    <td><input type="checkbox" style="text-align:center;" name="0" v-on:click= "update_checkbox(this)"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="1"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="2"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="3"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="4"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="5"/></td>
-                    <td><input type="checkbox" style="text-align:center;" name="6"/></td></tr>
+                <tr v-for="chore in chore_list"><th v-on:click= "prompt_edit_chore_title(chore._idx)">${chore.chore_title}</th>
+                    <td v-on:click= "update_checkbox(chore._idx,0)"> <div v-if='chore.sun=="DONE"'><i class="fa fa-check"></i></div></td>
+                    <td v-on:click= "update_checkbox(chore._idx,1)"> <div v-if='chore.mon=="DONE"'><i class="fa fa-check"></i></div></td></td>
+                    <td v-on:click= "update_checkbox(chore._idx,2)"> <div v-if='chore.tue=="DONE"'><i class="fa fa-check"></i></div></td></td>
+                    <td v-on:click= "update_checkbox(chore._idx,3)"> <div v-if='chore.wed=="DONE"'><i class="fa fa-check"></i></div></td></td>
+                    <td v-on:click= "update_checkbox(chore._idx,4)"> <div v-if='chore.thu=="DONE"'><i class="fa fa-check"></i></div></td></td>
+                    <td v-on:click= "update_checkbox(chore._idx,5)"> <div v-if='chore.fri=="DONE"'><i class="fa fa-check"></i></div></td></td>
+                    <td v-on:click= "update_checkbox(chore._idx,6)"> <div v-if='chore.sat=="DONE"'><i class="fa fa-check"></i></div></td></td> </tr>
             </div>
           </tbody>
         </table>
 
-                <button onclick="uncheck_all()">Clear Chart</button>
-                <script>
-                function uncheck_all() {
-                    let i=0;
-                    while(document.getElementsByName("0")[i]){
-                    document.getElementsByName("0")[i].checked = false;
-                    document.getElementsByName("1")[i].checked = false;
-                    document.getElementsByName("2")[i].checked = false;
-                    document.getElementsByName("3")[i].checked = false;
-                    document.getElementsByName("4")[i].checked = false;
-                    document.getElementsByName("5")[i].checked = false;
-                    document.getElementsByName("6")[i].checked = false;
-                    i++;
-                    }
-                }
-                </script>
+        <button v-on:click="clear_chart">Clear Chart</button>
+
 
     </div>
 

@@ -156,6 +156,13 @@ def add_chore():
     chore_id = db.chore.insert(
         chore_title=request.vars.chore_title,
         chore_author=auth.user.email,
+        sun="",
+        mon="",
+        tue="",
+        wed="",
+        thu="",
+        fri="",
+        sat="",
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(chore_id=chore_id))
@@ -186,8 +193,85 @@ def get_chore_list():
             id=row.id,
             chore_title=row.chore_title,
             chore_author=row.chore_author,
+            sun=row.sun,
+            mon=row.mon,
+            tue=row.tue,
+            wed=row.wed,
+            thu=row.thu,
+            fri=row.fri,
+            sat=row.sat,
         ))
     return response.json(dict(chore_list=results))
+
+@auth.requires_signature()
+def update_chore():
+    title = request.vars.chore_title
+    day = request.vars.day
+    if day == '0':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            sun="DONE",
+        )
+    elif day == '1':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            mon="DONE",
+        )
+    elif day == '2':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            tue="DONE",
+        )
+    elif day == '3':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            wed="DONE",
+        )
+    elif day == '4':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            thu="DONE",
+        )
+    elif day == '5':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            fri="DONE",
+        )
+    elif day == '6':
+        db.chore.update_or_insert(
+            (db.chore.chore_title == title),
+            sat="DONE",
+        )
+    return "update_chore done"
+
+
+@auth.requires_signature()
+def clear_chart():
+    db(db.chore.for_clear == 'clear').update(
+        sun="",
+        mon="",
+        tue="",
+        wed="",
+        thu="",
+        fri="",
+        sat="",
+    )
+    return "cleared chart"
+
+@auth.requires_signature()
+def edit_chore_title():
+    db(db.chore.chore_title == request.vars.old_title).update(
+        chore_title=request.vars.new_title,
+    )
+
+    return "edit_chore_title done"
+
+
+@auth.requires_signature()
+def delete_chore():
+    db(db.chore.chore_title == request.vars.chore_title).delete()
+
+    return "delete_chore done"
 
 
 

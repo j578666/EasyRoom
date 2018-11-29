@@ -5,6 +5,8 @@ table {
 
 table tr th{
     border:1px solid BLACK;
+    text-align: center; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
 
 }
 

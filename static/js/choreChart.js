@@ -36,6 +36,14 @@ var app = function() {
                     id: data.chore_id,
                     chore_title: sent_name,
                     chore_author: current_user,
+                    sun:"",
+                    mon:"",
+                    tue:"",
+                    wed:"",
+                    thu:"",
+                    fri:"",
+                    sat:"",
+
                 };
                 self.vue.chore_list.unshift(new_chore);
                 // We re-enumerate the array.
@@ -58,6 +66,7 @@ var app = function() {
         enumerate(self.vue.chore_list);
         self.vue.chore_list.map(function (e) {
             Vue.set(e, '_exist', true);
+
         });
     };
 
@@ -66,9 +75,58 @@ var app = function() {
     };
 
 
-    self.update_checkbox = function (check){
-        console.log("update_checkbox", check);
+    self.update_checkbox = function (idx, day){
+        if (confirm("Mark chore as complete?")){
+             var c = self.vue.chore_list[idx];
+             $.post(update_chore_url,
+            // Data we are sending.
+            {
+                chore_title: c.chore_title,
+                day:day,
+            });
+            self.get_chores();
+        }
+    };
 
+    self.clear_chart = function(){
+        $.post(clear_chart_url,
+            // Data we are sending.
+            {
+            });
+        self.get_chores();
+    };
+
+    self.prompt_edit_chore_title = function(idx){
+        var c = self.vue.chore_list[idx];
+
+        if(c.chore_author === current_user) {
+
+            var new_name = prompt('Chore Title:', c.chore_title);
+            if (new_name === "") {
+                self.delete_chore(c.chore_title);
+            } else if (new_name) {
+                self.edit_chore_title(c.chore_title, new_name);
+            }
+        }
+    };
+
+    self.delete_chore = function(chore_title){
+        $.post(delete_chore_url,
+            // Data we are sending.
+            {
+                chore_title: chore_title,
+            });
+        self.get_chores();
+    };
+
+    self.edit_chore_title = function(old_title, new_title){
+        $.post(edit_chore_title_url,
+            // Data we are sending.
+            {
+                old_title: old_title,
+                new_title: new_title,
+            });
+        self.get_chores();
     };
 
     self.vue = new Vue({
@@ -86,6 +144,10 @@ var app = function() {
             process_chores: self.process_chores,
             toggle_form: self.toggle_form,
             update_checkbox: self.update_checkbox,
+            clear_chart: self.clear_chart,
+            prompt_edit_chore_title: self.prompt_edit_chore_title,
+            edit_chore_title: self.edit_chore_title,
+            delete_chore: self.delete_chore,
         }
     });
 
