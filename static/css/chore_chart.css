@@ -1,0 +1,32 @@
+table {
+    font-size: inherit;
+
+}
+
+table tr th{
+    border:1px solid BLACK;
+
+}
+
+table tr td{
+    border:1px solid BLACK;
+    border-collapse: collapse;
+
+}
+
+
+table tr{
+    border:1px solid BLACK;
+
+}
+
+table td
+{
+  table-layout:fixed;
+  width:20px;
+  overflow:hidden;
+  word-wrap:break-word;
+  text-align: center; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
+
+}

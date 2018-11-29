@@ -51,10 +51,11 @@ db.define_table('reminder',
                 Field('end_date'),
                 Field('allday'),
                 Field('days_of_week'),
-                Field('repeat_bool'),
+                Field('repeat_bool', 'boolean'),
                 )
 
 db.define_table('chore',
+                Field('chore_author'),
                 Field('chore_title'),
-                Field('days_of_week'),
+                Field('checked_day'),
                 )

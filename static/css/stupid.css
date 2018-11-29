@@ -4,10 +4,14 @@
   License: BSD
 ************/
 
+
+
 /*** basic styles ***/
+/***
 html {box-sizing:border-box;}
 *, *:after, *:before {border:0; margin:0; padding:0; box-sizing:inherit;}
 html, body {max-width: 100vw; overflow-x: hidden}
+***/
 body {font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif}
 p, li {margin-bottom:0.5em}
 p {text-align:justify}
@@ -30,6 +34,7 @@ td, th {padding: 5px; text-align: left; vertical-align:top}
 thead th {vertical-align:bottom}
 header, main, footer {display:block; with:100%} /* IE fix */
 
+
 @media all and (max-width:599px) {
   h1{font-size:2em}
   h2{font-size:1.8em}
@@ -38,6 +43,7 @@ header, main, footer {display:block; with:100%} /* IE fix */
   h5{font-size:1.2em}
   h6{font-size:1.0em}
 }
+
 
 /*** buttons ***/
 .btn, button, [type=button], [type=submit] {padding:0.5em 1em; margin:0 0.5em 0.5em 0; display:inline-block; background-color:#26a69a; color:white}
@@ -96,7 +102,7 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
   .twothirds {width:66.66%; margin-right:-13.33px}
   label.quarter:not(.compressible).right, label.half:not(.compressible).right, label.threequarters:not(.compressible).right   {float:left; text-align:left}
 }
-@media all and (max-width:599px) {  
+@media all and (max-width:599px) {
   .quarter:not(.compressible), .half:not(.compressible), .third:not(.compressible), .twothirds:not(.compressible), .threequarters:not(.compressible) {width:100%;}
   label.quarter:not(.compressible).right, label.half:not(.compressible).right, label.threequarters:not(.compressible).right,
   label.third:not(.compressible).right, label.twothirds:not(.compressible).right   {float:left; text-align:left}
@@ -179,6 +185,7 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
   100% {left:107%; right:-8%}
 }
 
+
 /**** dropdown menu from http://codepen.io/philhoyt/pen/ujHzd ***/
 .menu {list-style:none; position:relative; margin:0; padding:0}
 .menu.right {float:right}
@@ -194,8 +201,9 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
 .menu.dark ul a {color:white}
 .menu.dark>li>ul>li:first-child:before{border-bottom-color:#111111}
 
+
 @media all and (max-width:599px) {
-  header .menu li, header .menu ul {width: 100%}  
+  header .menu li, header .menu ul {width: 100%}
   header .menu.right {float:left; text-align:left}
   header .menu ul ul {top:2.5em; left:-1px}
 }
@@ -204,6 +212,7 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
   .ham {display:none!important}
   .burger.accordion * {max-height:1000px; overflow:visible}
 }
+
 
 /*** sliding sidebar ***/
 .sidebar {
@@ -214,7 +223,7 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
     left:0;
     top:0;
     height:100vh;
-    box-shadow:0 0 10px #666;    
+    box-shadow:0 0 10px #666;
     width:220px;
     padding:0 10px 0 10px;
     margin-left:-210px;
@@ -242,6 +251,8 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
     50% {opacity:1.0}
     100% {-webkit-transform:scale(1.2, 1.2); opacity:0.0}
 }
+
+
 
 /**** underline effect ***/
 a:not(.btn):not(.noeffect) {position:relative}

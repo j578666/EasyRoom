@@ -7,6 +7,7 @@ response.intro = "This section serves as a discussion platform for the housemate
 {{extend 'layout.html'}}
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
+<link rel="stylesheet" href="{{=URL('static','css/stupid.css')}}">
 <script>
     var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
     var get_post_list_url = "{{=URL('api', 'get_post_list')}}";

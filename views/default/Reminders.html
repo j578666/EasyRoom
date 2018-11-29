@@ -2,10 +2,12 @@
 {{
 response.title='EasyRoom'
 response.subtitle='Calendar/Reminders'
-response.intro ="This section provides a calendar view for the housemates"
-response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
-"GREEN reminder means you are the author, RED means it's someone else's. " \
-"To Remove a reminder, click on the event and enter a blank name."
+response.intro ="This section provides a calendar view for the housemates."\
+"   It offers single-day/multi-day/days-of-week and time specification options for each reminder."
+response.intro2 =" Each housemate can add and edit/remove their own reminder by clicking on it." \
+"   To Remove a reminder, click on the reminder and clear the title." \
+"GREEN reminder means you are the author, RED means it's someone else's."
+
 }}
 <script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
 {{extend "layout.html"}}
@@ -122,7 +124,7 @@ response.intro2 ="Each housemate can add and edit/remove their own reminder. " \
 
             <div class="final_button">
               <button id="add-reminder" v-on:click="add_reminder">Submit</button>
-                <button v-on:click="show_reminder_form=false;single_day=false;multi_day=false;choose_time=false;show_options=false;time_options=false">Cancel</button>
+                <button v-on:click="show_reminder_form=false;single_day=false;multi_day=false;choose_time=false;show_options=false;time_options=false; repeat_b = false">Cancel</button>
             </div>
       </div>
 

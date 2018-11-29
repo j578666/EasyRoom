@@ -1,73 +1,79 @@
 {{
 response.title='EasyRoom'
 response.subtitle='Chore Chart'
-response.intro = ""
+response.intro = "A chore chart for the house; house member can add chore to the chart."
+response.intro2= "Member check the corresponding checkbox when a chore is complete."
 }}
 
-<script src="{{=URL('static', 'js/jquery.min.js')}}"></script>
 {{extend "layout.html"}}
-
-<script src="{{=URL('static', 'js/vue.js')}}"></script>
-<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.print.css')}}" media="print">
-<link rel="stylesheet" href="{{=URL('static','css/fullcalendar.min.css')}}">
-
-<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
-<script src="{{=URL('static', 'js/jquery-ui.min.js')}}"></script>
-<script src="{{=URL('static', 'js/fullcalendar.min.js')}}"></script>
-
-
-
 {{block head}}
- <script>
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<link rel="stylesheet" href="{{=URL('static','css/stupid.css')}}">
+<link rel="stylesheet" href="{{=URL('static','css/chore_chart.css')}}">
+
+<script>
  var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
  var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";
  var current_user = "{{=None if auth.user is None else auth.user.email}}";
- </script>
+</script>
 {{end}}
 
 <body>
-  <div id="vue-div">
-      <div class="button_pad">
-        <button  v-if="!show_chore_form" v-on:click="show_chore_form = true">Add Chore</button>
-      </div>
+  <div id="vue-div" class="display:none">
 
-      <div v-if="show_chore_form">
-       <div id="add_chore" >
-        <div class="form_row">
-          <div class="label">
+        <button v-if="!show_form" v-on:click= "show_form=true"> Add Chore</button>
+        <div class="container form_row" v-if="show_form">
+          <div class="third">
             Chore Name:
           </div>
-          <div class="form">
+          <div class="third">
             <input v-model="form_title" placeholder="Enter Chore Name"/>
+            <button class="small" id="add-chore" v-on:click= "add_chore"> Submit</button>
+            <button class="small" id="add-chore" v-on:click= "show_form = false"> Cancel</button>
           </div>
         </div>
 
-           <div class = "chore_type" id="repeat_for">
-            Select the days to be repeated:<br>
-            <input type="checkbox" name= "repeat" value='0'/> Sunday
-            <input type="checkbox" name= "repeat" value='1'/> Monday
-            <input type="checkbox" name= "repeat" value='2'/> Tuesday
-            <input type="checkbox" name= "repeat" value='3'/> Wednesday<br>
-            <input type="checkbox" name= "repeat" value='4'/> Thursday
-            <input type="checkbox" name= "repeat" value='5'/> Friday
-            <input type="checkbox" name= "repeat" value='6'/> Saturday
-           </div>
+        <table class="chore_chart fill" id="chart">
+          <thead>
+            <tr><td>Chore</td><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+            <th>Thu</th><th>Fri</th><th>Sat</th></tr>
+          </thead>
+          <tbody>
+            <div v-if="chore_list.length === 0">There are no chores.</div>
 
-
-
-            <div class="final_button">
-              <button id="add-chore" v-on:click="add_chore">Submit</button>
-              <button v-on:click="show_chore_form=false;">Cancel</button>
+            <div class="chore_list">
+                <tr v-for="chore in chore_list"><th>${chore.chore_title}</th>
+                    <td><input type="checkbox" style="text-align:center;" name="0" v-on:click= "update_checkbox(this)"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="1"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="2"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="3"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="4"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="5"/></td>
+                    <td><input type="checkbox" style="text-align:center;" name="6"/></td></tr>
             </div>
-       </div>
+          </tbody>
+        </table>
 
-     </div>   <!-- end show_form -->
+                <button onclick="uncheck_all()">Clear Chart</button>
+                <script>
+                function uncheck_all() {
+                    let i=0;
+                    while(document.getElementsByName("0")[i]){
+                    document.getElementsByName("0")[i].checked = false;
+                    document.getElementsByName("1")[i].checked = false;
+                    document.getElementsByName("2")[i].checked = false;
+                    document.getElementsByName("3")[i].checked = false;
+                    document.getElementsByName("4")[i].checked = false;
+                    document.getElementsByName("5")[i].checked = false;
+                    document.getElementsByName("6")[i].checked = false;
+                    i++;
+                    }
+                }
+                </script>
 
-  </div>
-      <div id="calendar"></div>
+    </div>
+
 </body>
-
-
 
 
 <script src="{{=URL('static', 'js/choreChart.js')}}"></script>
