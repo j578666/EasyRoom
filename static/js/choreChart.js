@@ -66,7 +66,14 @@ var app = function() {
         enumerate(self.vue.chore_list);
         self.vue.chore_list.map(function (e) {
             Vue.set(e, '_exist', true);
-
+            Vue.set(e, '_chore_title', e.chore_title);
+            Vue.set(e, '_sun', e.sun ==="DONE");
+            Vue.set(e, '_mon', e.mon ==="DONE");
+            Vue.set(e, '_tue', e.tue ==="DONE");
+            Vue.set(e, '_wed', e.wed ==="DONE");
+            Vue.set(e, '_thu', e.thu ==="DONE");
+            Vue.set(e, '_fri', e.fri ==="DONE");
+            Vue.set(e, '_sat', e.sat ==="DONE");
         });
     };
 
@@ -78,22 +85,48 @@ var app = function() {
     self.update_checkbox = function (idx, day){
         if (confirm("Mark chore as complete?")){
              var c = self.vue.chore_list[idx];
-             $.post(update_chore_url,
+
+           if(day===0){
+               c._sun = true;
+           }else if (day===1){
+               c._mon = true;
+           }else if (day===2){
+               c._tue = true;
+           }else if (day===3){
+               c._wed = true;
+           }else if (day===4){
+               c._thu = true;
+           }else if (day===5){
+               c._fri = true;
+           }else if (day===6){
+               c._sat = true;
+           }
+
+           $.post(update_chore_url,
             // Data we are sending.
             {
                 chore_title: c.chore_title,
                 day:day,
             });
-            self.get_chores();
+
         }
     };
-
     self.clear_chart = function(){
         $.post(clear_chart_url,
             // Data we are sending.
             {
             });
-        self.get_chores();
+            self.vue.chore_list.map(function (e) {
+            Vue.set(e, '_exist', true);
+            Vue.set(e, '_sun', false);
+            Vue.set(e, '_mon', false);
+            Vue.set(e, '_tue', false);
+            Vue.set(e, '_wed', false);
+            Vue.set(e, '_thu', false);
+            Vue.set(e, '_fri', false);
+            Vue.set(e, '_sat', false);
+        });
+
     };
 
     self.prompt_edit_chore_title = function(idx){
@@ -101,11 +134,13 @@ var app = function() {
 
         if(c.chore_author === current_user) {
 
-            var new_name = prompt('Chore Title:', c.chore_title);
+            var new_name = prompt('Chore Title:', c._chore_title);
             if (new_name === "") {
-                self.delete_chore(c.chore_title);
+                c._exist = false;
+                self.delete_chore(c._chore_title);
             } else if (new_name) {
                 self.edit_chore_title(c.chore_title, new_name);
+                c._chore_title = new_name;
             }
         }
     };
@@ -116,7 +151,6 @@ var app = function() {
             {
                 chore_title: chore_title,
             });
-        self.get_chores();
     };
 
     self.edit_chore_title = function(old_title, new_title){
@@ -126,7 +160,6 @@ var app = function() {
                 old_title: old_title,
                 new_title: new_title,
             });
-        self.get_chores();
     };
 
     self.vue = new Vue({
@@ -137,6 +170,13 @@ var app = function() {
             form_title: "",
             chore_list: [],
             show_form: false,
+            sun:"",
+            mon:"",
+            tue:"",
+            wed:"",
+            thu:"",
+            fri:"",
+            sat:"",
         },
         methods: {
             add_chore: self.add_chore,

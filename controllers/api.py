@@ -208,38 +208,31 @@ def update_chore():
     title = request.vars.chore_title
     day = request.vars.day
     if day == '0':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title),).update(
             sun="DONE",
         )
     elif day == '1':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             mon="DONE",
         )
     elif day == '2':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             tue="DONE",
         )
     elif day == '3':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             wed="DONE",
         )
     elif day == '4':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             thu="DONE",
         )
     elif day == '5':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             fri="DONE",
         )
     elif day == '6':
-        db.chore.update_or_insert(
-            (db.chore.chore_title == title),
+        db((db.chore.chore_title == title), ).update(
             sat="DONE",
         )
     return "update_chore done"

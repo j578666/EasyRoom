@@ -49,14 +49,14 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
             <div v-if="chore_list.length === 0">There are no chores.</div>
 
             <div class="chore_list">
-                <tr v-for="chore in chore_list"><th v-on:click= "prompt_edit_chore_title(chore._idx)">${chore.chore_title}</th>
-                    <td v-on:click= "update_checkbox(chore._idx,0)"> <div v-if='chore.sun=="DONE"'><i class="fa fa-check"></i></div></td>
-                    <td v-on:click= "update_checkbox(chore._idx,1)"> <div v-if='chore.mon=="DONE"'><i class="fa fa-check"></i></div></td></td>
-                    <td v-on:click= "update_checkbox(chore._idx,2)"> <div v-if='chore.tue=="DONE"'><i class="fa fa-check"></i></div></td></td>
-                    <td v-on:click= "update_checkbox(chore._idx,3)"> <div v-if='chore.wed=="DONE"'><i class="fa fa-check"></i></div></td></td>
-                    <td v-on:click= "update_checkbox(chore._idx,4)"> <div v-if='chore.thu=="DONE"'><i class="fa fa-check"></i></div></td></td>
-                    <td v-on:click= "update_checkbox(chore._idx,5)"> <div v-if='chore.fri=="DONE"'><i class="fa fa-check"></i></div></td></td>
-                    <td v-on:click= "update_checkbox(chore._idx,6)"> <div v-if='chore.sat=="DONE"'><i class="fa fa-check"></i></div></td></td> </tr>
+                <tr v-for="chore in chore_list" v-if="chore._exist"><th v-on:click= "prompt_edit_chore_title(chore._idx)">${chore._chore_title}</th>
+                    <td v-on:click= "update_checkbox(chore._idx,0)"> <i v-if="chore._sun" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,1)"> <i v-if="chore._mon" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,2)"> <i v-if="chore._tue" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,3)"> <i v-if="chore._wed" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,4)"> <i v-if="chore._thu" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,5)"> <i v-if="chore._fri" class="fa fa-check"></i></td>
+                    <td v-on:click= "update_checkbox(chore._idx,6)"> <i v-if="chore._sat" class="fa fa-check"></i></td></tr>
             </div>
           </tbody>
         </table>
