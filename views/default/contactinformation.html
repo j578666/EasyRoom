@@ -1,14 +1,33 @@
 {{
 response.title='EasyRoom'
-response.subtitle='Contact Information'
-response.intro = "This section shows each housemate's contact information"
+response.subtitle='ContactInfo'
+response.intro = "This section shows you all the other housemate information."
 }}
 
 {{extend 'layout.html'}}
-<head>
-    <meta charset="UTF-8">
-    <h1>Contact Information</h1>
-</head>
-<body>
 
-</body>
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+	var is_logged_in = "{{='false' if auth.user is None else 'true'}}";
+	var get_user_list_url = "{{=URL('api', 'get_user_list')}}";
+
+</script>
+{{end}}
+
+
+<div class ="main_content">
+    <div id="vue-div" class="display:none">
+    	<div class="post_div" v-for="user in user_list">
+    		<p><b>${user.first_name} ${user.last_name}'s profile</b></p>
+    		<p><b>House Affiliation: </b> ${user.house}</p>
+    		<p><b>Email: </b>${user.email}</p>
+    		<p><b>Phone: </b>${user.phone}</p>
+    		<p><b>PayPal: </b>${user.paypal}</p>
+    	</div>
+    </div>
+</div>
+
+
+
+<script src="{{=URL('static', 'js/contact_info.js')}}"></script>

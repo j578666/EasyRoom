@@ -1,15 +1,79 @@
 {{
 response.title='EasyRoom'
 response.subtitle='PayBills'
-response.intro = "This section allows housemates to pay for rent and groceries via venmo or paypal."
+response.intro = "This section allows housemates to pay for rent and groceries via a PayPalMe link."
 }}
 
 {{extend 'layout.html'}}
 
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var get_user_list_url = "{{=URL('api', 'get_user_list')}}";
+    //get request
+    var get_request_url= "{{=URL('api', 'get_request_list')}}";
+    var myPayPal = "{{='None' if auth.user is None else auth.user.PayPalMe}}";
+    var is_logged_in = "{{='false' if auth.user is None else 'true'}}";
+    var auth_user = "{{='None' if auth.user is None else auth.user.first_name}}";
+    //add request
+    var add_request_url = "{{=URL('api', 'add_request', user_signature=True)}}";
+    var delete_request_url = "{{=URL('api', 'delete_request', user_signature=True)}}";
 
+</script>
+{{end}}
 
-<div class ="content">
-    <h1>Pay!</h1>
+<div class ="main_content">
+    <div id="vue-div" class="display:none">
+        <div v-if="is_logged_in=='false'">
+            <h1>Please Login</h1>
+        </div>
+        <div v-if="user_list.length==0 && is_logged_in =='true'">
+            <h2>You are the only one in the house</h2>
+        </div>
+        <div v-if="is_logged_in">
+            <h2>Pay or Request Money</h2>
+            <span v-for="user in user_list">
+                <button v-on:click="pay(user._idx)">Pay ${user.first_name}</button>
+                &nbsp;
+            </span>
+            <br>
+            <span v-for="user in user_list">
+                <button v-on:click="send_request_toggle(user._idx, user.first_name, user.email)">Request  ${user.first_name}</button>
+                &nbsp;
+            </span>
+        </div>
+        <div v-if="show_request">
+            <div class="container">
+                <label class="quarter right">Requesting ${selected_person} for</label>
+                <div class="half">
+                     <input v-model="request_reason" placeholder="Enter Reason">
+                </div>
+            </div>
+            <div class="container">
+                <label class="quarter right">With what amount?</label>
+                <div class="half">
+                     <input v-model="request_amount" placeholder="$">
+                </div>
+            </div>
+            <div class="container">
+                <label class="quarter right">What is the due date?</label>
+                <div class="half">
+                     <input v-model="request_due" placeholder="mm/dd/yy">
+                </div>
+                <button v-on:click="send_request(auth_user)">Submit</button>
+            </div>
+        </div>
+        <div v-if="!show_request">
+            <div class="post_div" v-for="request in request_list">
+                <label><b>${request.request_reason}</b></label>
+                <p><b>Requested From:</b> ${request.request_self} to ${request.request_person}
+                <b>Amount:</b> ${request.request_amount}
+                <b>Due Date:</b> ${request.request_due}</p>
+                <button v-if="auth_user == request.request_person" v-on:click="delete_request(request._idx, request.request_from, request.request_reason)">Payed!</button>
+            </div>
+        </div>
 
+    </div>
 </div>
 
+<script src="{{=URL('static', 'js/paybill.js')}}"></script>

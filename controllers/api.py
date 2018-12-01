@@ -289,3 +289,61 @@ def remove_reminder():
     return "removed reminder"
 
 
+#get user list (samehouse)
+def get_user_list():
+    results = []
+    if auth.user is None:
+        return "not logged"
+    else:
+        rows = db().select(db.auth_user.ALL, orderby=~db.auth_user.id)
+        for row in rows:
+            if auth.user.HouseName == row.HouseName:
+                if auth.user.email != row.email:
+                    results.append(dict(
+                        house=row.HouseName,
+                        first_name=row.first_name,
+                        last_name=row.last_name,
+                        paypal=row.PayPalMe,
+                        email=row.email,
+                        phone=row.Phone,
+                    ))
+    return response.json(dict(user_list=results))
+
+@auth.requires_signature()
+def add_request():
+    req_id = db.payment_request.insert(
+        request_reason=request.vars.request_reason,
+        request_amount=request.vars.request_amount,
+        request_due_date=request.vars.request_due,
+        request_from=auth.user.email,
+        request_to=request.vars.request_to,
+        request_person=request.vars.request_person,
+        request_self=auth.user.first_name,
+    )
+    # We return the id of the new post, so we can insert it along all the others.
+    return response.json(dict(req_id=req_id, req_s=auth.user.first_name))
+
+def get_request_list():
+    results = []
+    if auth.user is None:
+        return "not logged"
+    else:
+        rows = db().select(db.payment_request.ALL, orderby=~db.payment_request.request_time)
+        for row in rows:
+            results.append(dict(
+                request_reason=row.request_reason,
+                request_amount=row.request_amount,
+                request_due=row.request_due_date,
+                request_from=row.request_from,
+                request_to=row.request_to,
+                request_person=row.request_person,
+                request_self=row.request_self,
+            ))
+    return response.json(dict(request_list=results))
+
+@auth.requires_signature()
+def delete_request():
+    db(db.payment_request.request_from==request.vars.request_from and db.payment_request.request_reason==request.vars.request_reason).delete()
+
+    return "Deleted request"
+

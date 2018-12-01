@@ -67,3 +67,14 @@ db.define_table('chore',
                 Field('for_clear', default="clear"), #use for clearing the chart
 
                 )
+
+db.define_table('payment_request',
+                Field('request_time', 'datetime', default=get_current_time()),
+                Field('request_reason'),
+                Field('request_amount'),
+                Field('request_due_date'),
+                Field('request_from'),
+                Field('request_to'),
+                Field('request_person'),
+                Field('request_self'),
+                )
