@@ -22,6 +22,8 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
  var edit_chore_title_url = "{{=URL('api', 'edit_chore_title', user_signature=True)}}";
  var delete_chore_url = "{{=URL('api', 'delete_chore', user_signature=True)}}";
  var current_user = "{{=None if auth.user is None else auth.user.email}}";
+ var get_house_name_url = "{{=URL('api', 'get_house_name', user_signature=True)}}";
+
 </script>
 {{end}}
 
@@ -46,7 +48,6 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
             <th>Thu</th><th>Fri</th><th>Sat</th></tr>
           </thead>
           <tbody>
-            <div v-if="chore_list.length === 0">There are no chores.</div>
 
             <div class="chore_list">
                 <tr v-for="chore in chore_list" v-if="chore._exist"><th v-on:click= "prompt_edit_chore_title(chore._idx)">${chore._chore_title}</th>
@@ -63,8 +64,8 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
 
         <button v-on:click="clear_chart">Clear Chart</button>
 
-
     </div>
+
 
 </body>
 

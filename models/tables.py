@@ -22,6 +22,7 @@ def get_user_email():
 def get_current_time():
     return datetime.datetime.utcnow()
 
+
 db.define_table('post',
                 Field('post_author', default=get_user_email()),
                 Field('post_title'),
@@ -64,8 +65,7 @@ db.define_table('chore',
                 Field('thu'),
                 Field('fri'),
                 Field('sat'),
-                Field('for_clear', default="clear"), #use for clearing the chart
-
+                Field('house_name')
                 )
 
 db.define_table('payment_request',

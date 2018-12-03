@@ -163,6 +163,7 @@ def add_chore():
         thu="",
         fri="",
         sat="",
+        house_name=request.vars.house_name,
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(chore_id=chore_id))
@@ -200,39 +201,41 @@ def get_chore_list():
             thu=row.thu,
             fri=row.fri,
             sat=row.sat,
+            house_name=row.house_name,
         ))
     return response.json(dict(chore_list=results))
 
 @auth.requires_signature()
 def update_chore():
     title = request.vars.chore_title
+    house_name = request.vars.house_name
     day = request.vars.day
     if day == '0':
-        db((db.chore.chore_title == title),).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             sun="DONE",
         )
     elif day == '1':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             mon="DONE",
         )
     elif day == '2':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             tue="DONE",
         )
     elif day == '3':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             wed="DONE",
         )
     elif day == '4':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             thu="DONE",
         )
     elif day == '5':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             fri="DONE",
         )
     elif day == '6':
-        db((db.chore.chore_title == title), ).update(
+        db((db.chore.chore_title == title) & (db.chore.house_name == house_name)).update(
             sat="DONE",
         )
     return "update_chore done"
@@ -240,7 +243,7 @@ def update_chore():
 
 @auth.requires_signature()
 def clear_chart():
-    db(db.chore.for_clear == 'clear').update(
+    db(db.chore.house_name == request.vars.house_name).update(
         sun="",
         mon="",
         tue="",
@@ -253,7 +256,8 @@ def clear_chart():
 
 @auth.requires_signature()
 def edit_chore_title():
-    db(db.chore.chore_title == request.vars.old_title).update(
+    db((db.chore.chore_title == request.vars.old_title) &
+       (db.chore.house_name == request.vars.house_name)).update(
         chore_title=request.vars.new_title,
     )
 
@@ -262,7 +266,8 @@ def edit_chore_title():
 
 @auth.requires_signature()
 def delete_chore():
-    db(db.chore.chore_title == request.vars.chore_title).delete()
+    db((db.chore.chore_title == request.vars.chore_title) &
+       (db.chore.house_name == request.vars.house_name)).delete()
 
     return "delete_chore done"
 
@@ -347,3 +352,11 @@ def delete_request():
 
     return "Deleted request"
 
+@auth.requires_signature()
+def get_house_name():
+    house_name = "Empty"
+    rows = db().select(db.auth_user.ALL, orderby=~db.auth_user.id)
+    for row in rows:
+        if row.email == auth.user.email:
+            house_name = row.HouseName
+    return response.json(dict(house_name=house_name))

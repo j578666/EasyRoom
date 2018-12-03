@@ -25,6 +25,7 @@ var app = function() {
             // Data we are sending.
             {
                 chore_title: self.vue.form_title,
+                house_name: self.vue.house_name,
             },
 
             function (data) {
@@ -43,6 +44,7 @@ var app = function() {
                     thu:"",
                     fri:"",
                     sat:"",
+                    house_name:self.vue.house_name,
 
                 };
                 self.vue.chore_list.unshift(new_chore);
@@ -65,7 +67,6 @@ var app = function() {
     self.process_chores = function() {
         enumerate(self.vue.chore_list);
         self.vue.chore_list.map(function (e) {
-            Vue.set(e, '_exist', true);
             Vue.set(e, '_chore_title', e.chore_title);
             Vue.set(e, '_sun', e.sun ==="DONE");
             Vue.set(e, '_mon', e.mon ==="DONE");
@@ -74,7 +75,14 @@ var app = function() {
             Vue.set(e, '_thu', e.thu ==="DONE");
             Vue.set(e, '_fri', e.fri ==="DONE");
             Vue.set(e, '_sat', e.sat ==="DONE");
+            Vue.set(e, '_house_name', e.house_name);
+            Vue.set(e, '_exist', e.house_name === self.vue.house_name);
+
+            console.log("HouseName:",e.house_name);
+            console.log("VUE HouseName:",self.vue.house_name);
         });
+
+
     };
 
     self.toggle_form = function(){
@@ -107,6 +115,7 @@ var app = function() {
             {
                 chore_title: c.chore_title,
                 day:day,
+                house_name: c.house_name,
             });
 
         }
@@ -115,9 +124,9 @@ var app = function() {
         $.post(clear_chart_url,
             // Data we are sending.
             {
+                house_name:self.vue.house_name,
             });
             self.vue.chore_list.map(function (e) {
-            Vue.set(e, '_exist', true);
             Vue.set(e, '_sun', false);
             Vue.set(e, '_mon', false);
             Vue.set(e, '_tue', false);
@@ -137,30 +146,45 @@ var app = function() {
             var new_name = prompt('Chore Title:', c._chore_title);
             if (new_name === "") {
                 c._exist = false;
-                self.delete_chore(c._chore_title);
+                self.delete_chore(c._chore_title, c.house_name);
             } else if (new_name) {
-                self.edit_chore_title(c.chore_title, new_name);
+                self.edit_chore_title(c.chore_title, new_name, c.house_name);
                 c._chore_title = new_name;
             }
         }
     };
 
-    self.delete_chore = function(chore_title){
+    self.delete_chore = function(chore_title, house_name){
         $.post(delete_chore_url,
             // Data we are sending.
             {
                 chore_title: chore_title,
+                house_name: house_name,
             });
     };
 
-    self.edit_chore_title = function(old_title, new_title){
+    self.edit_chore_title = function(old_title, new_title, house_name){
         $.post(edit_chore_title_url,
             // Data we are sending.
             {
                 old_title: old_title,
                 new_title: new_title,
+                house_name:house_name,
             });
     };
+
+    self.get_house_name = function(){
+        $.getJSON(get_house_name_url,
+            function(data) {
+                self.vue.house_name = data.house_name;
+                self.process_chores();
+                self.get_chores();
+                 console.log("Initial Vue House name:",self.vue.house_name);
+            }
+        );
+        console.log("get_house_name called")
+    };
+
 
     self.vue = new Vue({
         el: "#vue-div",
@@ -170,13 +194,7 @@ var app = function() {
             form_title: "",
             chore_list: [],
             show_form: false,
-            sun:"",
-            mon:"",
-            tue:"",
-            wed:"",
-            thu:"",
-            fri:"",
-            sat:"",
+            house_name:"",
         },
         methods: {
             add_chore: self.add_chore,
@@ -188,10 +206,11 @@ var app = function() {
             prompt_edit_chore_title: self.prompt_edit_chore_title,
             edit_chore_title: self.edit_chore_title,
             delete_chore: self.delete_chore,
+            get_house_name: self.get_house_name,
         }
     });
-
-    self.get_chores();
+    self.get_house_name();
+    //self.get_chores();
     return self;
 };
 
