@@ -46,7 +46,9 @@ var app = function() {
                     post_name: current_user_name,
                     _exist: true,
                     house_name: self.vue.house_name,
+                    post_date: data.date,
                 };
+
                 self.vue.post_list.unshift(new_post);
                 // We re-enumerate the array.
                 self.process_posts();

@@ -15,12 +15,13 @@ div.main_content div.form_row {
 /* line 13, ../sass/_main.scss */
 div.main_content div.post_div {
   margin: 4px;
-  border: 2px #a9def9 solid;
+  border: 4px #a9def9 solid;
   padding: 4px;
+   background-color: #f5f5f5;
 }
 /* line 18, ../sass/_main.scss */
 div.main_content div.post_div .post_title {
-  font-size: 120%;
+    font-size: 120%;
 }
 /* line 22, ../sass/_main.scss */
 div.main_content i.changed {
@@ -40,5 +41,18 @@ div.button_pad{
 
 div.make_bold{
     font-weight:bold;
+
+}
+
+.my_button{padding:0.5em 1em; margin:0 0.5em 0.5em 0; display:inline-block; background-color: #1496e4; color:white}
+.my_button:hover{box-shadow:0 0 10px #666; text-decoration:none; cursor:pointer}
+
+table td
+{
+  table-layout:fixed;
+  overflow:hidden;
+  word-wrap:break-word;
+  text-align: left; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
 
 }

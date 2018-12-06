@@ -82,7 +82,7 @@ div.error { background-color: red; color: white; padding: 3px; }
        </ul>
       </div>
       <div id="content">
-       <div class="flash">{{=response.flash or ''}}</div>
+       <div class="flash">{{="Please Login" if auth.user is None else auth.user.HouseName}}</div>
        {{include}}
       </div>
      </div>

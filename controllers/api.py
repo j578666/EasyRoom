@@ -3,6 +3,7 @@
 @auth.requires_login()
 @auth.requires_signature()
 def add_post():
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
     current_time = get_current_time()
     post_id = db.post.insert(
         post_title=request.vars.post_title,
@@ -11,10 +12,11 @@ def add_post():
         post_time=current_time,
         post_name=auth.user.first_name,
         house_name=request.vars.house_name,
+        post_date=today,
 
     )
     # We return the id of the new post, so we can insert it along all the others.
-    return response.json(dict(post_id=post_id, post_time=current_time))
+    return response.json(dict(post_id=post_id, post_time=current_time, date=today))
 
 
 @auth.requires_login()
@@ -39,7 +41,8 @@ def get_post_list():
                 p_thumb_count=calc_count(row.post.id),
                 post_time=row.post.post_time,
                 post_name=row.post.post_name,
-                house_name=row.post.house_name
+                house_name=row.post.house_name,
+                post_date=row.post.post_date,
 
             ))
 
@@ -336,6 +339,7 @@ def get_user_list():
                         paypal=row.PayPalMe,
                         email=row.email,
                         phone=row.Phone,
+                        photo=row.Photo,
                     ))
     return response.json(dict(user_list=results))
 

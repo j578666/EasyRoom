@@ -8,6 +8,8 @@ response.intro = "This section serves as a discussion platform for the housemate
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <link rel="stylesheet" href="{{=URL('static','css/stupid.css')}}">
+<link rel="stylesheet" href="{{=URL('static','css/myapp.css')}}">
+
 <script>
     var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
     var get_post_list_url = "{{=URL('api', 'get_post_list')}}";
@@ -67,24 +69,35 @@ response.intro = "This section serves as a discussion platform for the housemate
 
         <!-- We display the posts. -->
 
+
+
+
+
         <div class="post_div" v-for="post in post_list">
             <div v-if="post._exist">
-
+                <div class = "">${post.post_date}</div>
+                <div class = "container">
+                <div class="quarter">
                 <div v-if="!post._editing">
                     <div class="make_bold">${post.post_title}</div>
                 </div>
                 <div v-if="post._editing">
                     Title: <textarea v-model="post.post_title"></textarea>
                 </div>
-
+                </div>
+                <div class="half">
                 <div v-if="!post._editing">
-                    <div>${post.post_content}</div>
+                    <div>${post.post_content} - ${post.post_name}</div>
+
                 </div>
                 <div v-if="post._editing">
                     Content: <textarea v-model="post.post_content"></textarea>
 
                 </div>
-                <div>by ${post.post_name}</div>
+
+                </div>
+            </div>
+
 
                 <div class="attributes">
 

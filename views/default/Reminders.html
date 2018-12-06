@@ -18,7 +18,7 @@ response.intro2 =" Each housemate can add and edit/remove their own reminder by 
 <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 <script src="{{=URL('static', 'js/fullcalendar.min.js')}}"></script>
 <script src="{{=URL('static', 'js/jquery-ui.min.js')}}"></script>
-
+<link rel="stylesheet" href="{{=URL('static','css/myapp.css')}}">
 
 {{block head}}
  <script>
@@ -35,7 +35,7 @@ response.intro2 =" Each housemate can add and edit/remove their own reminder by 
   <div id="vue-div">
 
       <div class="button_pad">
-        <button  v-if="!show_reminder_form & !show_options & !time_options" v-on:click="show_options = true"> Add Reminder</button>
+        <button  class="my_button " v-if="!show_reminder_form & !show_options & !time_options" v-on:click="show_options = true"> Add Reminder</button>
       </div>
 
       <div v-if="show_options & !show_reminder_form" >

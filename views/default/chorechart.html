@@ -14,6 +14,8 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
 <link rel="stylesheet" href="{{=URL('static','css/chore_chart.css')}}">
 <link rel="stylesheet" href="{{=URL('static','font-awesome-4.6.3/css/font-awesome.css')}}">
 
+
+
 <script>
     var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
     var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";

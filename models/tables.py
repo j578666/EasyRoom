@@ -22,6 +22,8 @@ def get_user_email():
 def get_current_time():
     return datetime.datetime.utcnow()
 
+def get_current_date():
+    return datetime.datetime.today().strftime('%Y-%m-%d')
 
 db.define_table('post',
                 Field('post_author', default=get_user_email()),
@@ -30,6 +32,7 @@ db.define_table('post',
                 Field('post_time', 'datetime'),
                 Field('post_name'),
                 Field('house_name'),
+                Field('post_date', default=get_current_date()),
                 )
 
 

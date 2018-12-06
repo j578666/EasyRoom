@@ -70,7 +70,7 @@ plugins = PluginManager()
 auth.settings.extra_fields['auth_user']= [
   Field('Phone', requires=IS_NOT_EMPTY()),
   Field('HouseName', requires=IS_NOT_EMPTY()),
-  Field('Invitation'),
+  Field('Photo','upload'),
   Field('PayPalMe',  requires=IS_NOT_EMPTY())]
 
 

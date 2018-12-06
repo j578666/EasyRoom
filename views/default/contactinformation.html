@@ -21,9 +21,10 @@ response.intro = "This section shows you all the other housemate information."
     	<div class="post_div" v-for="user in user_list">
     		<p><b>${user.first_name} ${user.last_name}'s profile</b></p>
     		<p><b>House Affiliation: </b> ${user.house}</p>
-    		<p><b>Email: </b>${user.email}</p>
+    		<p><b>Email: </b>${user.email}           <img src="{{=URL('default', 'download', args='auth_user.Photo.93c9ecaa3d73769e.6a6f686e6e792e6a7067.jpg')}}" width="200px" /></p>
     		<p><b>Phone: </b>${user.phone}</p>
     		<p><b>PayPal: </b>${user.paypal}</p>
+            
     	</div>
     </div>
 </div>

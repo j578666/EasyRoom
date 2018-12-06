@@ -27,9 +27,7 @@ response.intro = "This section allows housemates to pay for rent and groceries v
         <div v-if="is_logged_in=='false'">
             <h1>Please Login</h1>
         </div>
-        <div v-if="user_list.length==0 && is_logged_in =='true'">
-            <h2>You are the only one in the house</h2>
-        </div>
+        
         <div v-if="is_logged_in">
             <h2>Pay or Request Money</h2>
             <span v-for="user in user_list">
@@ -69,7 +67,7 @@ response.intro = "This section allows housemates to pay for rent and groceries v
                 <p><b>Requested From:</b> ${request.request_self} to ${request.request_person}
                 <b>Amount:</b> ${request.request_amount}
                 <b>Due Date:</b> ${request.request_due}</p>
-                <button v-if="auth_user == request.request_person" v-on:click="delete_request(request._idx, request.request_from, request.request_reason)">Payed!</button>
+                <button v-if="auth_user == request.request_self" v-on:click="delete_request(request._idx, request.request_from, request.request_reason)">Request Payed!</button>
             </div>
         </div>
 
