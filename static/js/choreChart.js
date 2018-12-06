@@ -21,18 +21,23 @@ var app = function() {
         $.web2py.disableElement($("#add-chore"));
         self.toggle_form();
         var sent_name = self.vue.form_title; // Makes a copy
+        var sent_assign = self.vue.form_assign;
         $.post(add_chore_url,
             // Data we are sending.
             {
                 chore_title: self.vue.form_title,
                 house_name: self.vue.house_name,
+                assigned: self.vue.form_assign,
             },
 
             function (data) {
                 // Re-enable the button.
                 $.web2py.enableElement($("#add-chore"));
+
                 // Clears the form.
                 self.vue.form_title = "";
+                self.vue.form_assign = "";
+
                 var new_chore = {
                     id: data.chore_id,
                     chore_title: sent_name,
@@ -45,6 +50,7 @@ var app = function() {
                     fri:"",
                     sat:"",
                     house_name:self.vue.house_name,
+                    assigned: sent_assign,
 
                 };
                 self.vue.chore_list.unshift(new_chore);
@@ -76,10 +82,9 @@ var app = function() {
             Vue.set(e, '_fri', e.fri ==="DONE");
             Vue.set(e, '_sat', e.sat ==="DONE");
             Vue.set(e, '_house_name', e.house_name);
-            Vue.set(e, '_exist', e.house_name === self.vue.house_name);
+            Vue.set(e, '_exist', true);
+            Vue.set(e, '_assigned', e.assigned);
 
-            console.log("HouseName:",e.house_name);
-            console.log("VUE HouseName:",self.vue.house_name);
         });
 
 
@@ -179,12 +184,26 @@ var app = function() {
                 self.vue.house_name = data.house_name;
                 self.process_chores();
                 self.get_chores();
-                 console.log("Initial Vue House name:",self.vue.house_name);
+                // console.log("Initial Vue House name:",self.vue.house_name);
             }
         );
-        console.log("get_house_name called")
+        //console.log("get_house_name called")
     };
 
+
+    self.edit_assignment = function(idx){
+        var c = self.vue.chore_list[idx];
+        var new_assignment = prompt('Chore Assigned To:', c._assigned);
+          $.post(edit_assignment_url,
+            // Data we are sending.
+            {
+                chore_title: c._chore_title,
+                house_name:c._house_name,
+                new_assigned: new_assignment,
+            });
+
+          c._assigned = new_assignment;
+    };
 
     self.vue = new Vue({
         el: "#vue-div",
@@ -195,6 +214,7 @@ var app = function() {
             chore_list: [],
             show_form: false,
             house_name:"",
+            form_assign:"",
         },
         methods: {
             add_chore: self.add_chore,
@@ -207,6 +227,7 @@ var app = function() {
             edit_chore_title: self.edit_chore_title,
             delete_chore: self.delete_chore,
             get_house_name: self.get_house_name,
+            edit_assignment: self.edit_assignment,
         }
     });
     self.get_house_name();

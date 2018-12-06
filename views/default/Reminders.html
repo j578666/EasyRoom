@@ -27,6 +27,7 @@ response.intro2 =" Each housemate can add and edit/remove their own reminder by 
  var current_user = "{{=None if auth.user is None else auth.user.email}}";
  var edit_reminder_name_url = "{{=URL('api', 'edit_reminder_name', user_signature=True)}}";
  var remove_reminder_url = "{{=URL('api', 'remove_reminder', user_signature=True)}}";
+ var get_house_name_url = "{{=URL('api', 'get_house_name', user_signature=True)}}";
  </script>
 {{end}}
 

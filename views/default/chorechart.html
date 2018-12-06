@@ -15,56 +15,81 @@ response.intro2= "Users can edit/delete the chores they added by clicking on the
 <link rel="stylesheet" href="{{=URL('static','font-awesome-4.6.3/css/font-awesome.css')}}">
 
 <script>
- var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
- var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";
- var update_chore_url = "{{=URL('api', 'update_chore', user_signature=True)}}";
- var clear_chart_url = "{{=URL('api', 'clear_chart', user_signature=True)}}";
- var edit_chore_title_url = "{{=URL('api', 'edit_chore_title', user_signature=True)}}";
- var delete_chore_url = "{{=URL('api', 'delete_chore', user_signature=True)}}";
- var current_user = "{{=None if auth.user is None else auth.user.email}}";
- var get_house_name_url = "{{=URL('api', 'get_house_name', user_signature=True)}}";
+    var add_chore_url = "{{=URL('api', 'add_chore', user_signature=True)}}";
+    var get_chore_list_url = "{{=URL('api', 'get_chore_list', user_signature=True)}}";
+    var update_chore_url = "{{=URL('api', 'update_chore', user_signature=True)}}";
+    var clear_chart_url = "{{=URL('api', 'clear_chart', user_signature=True)}}";
+    var edit_chore_title_url = "{{=URL('api', 'edit_chore_title', user_signature=True)}}";
+    var delete_chore_url = "{{=URL('api', 'delete_chore', user_signature=True)}}";
+    var current_user = "{{=None if auth.user is None else auth.user.email}}";
+    var get_house_name_url = "{{=URL('api', 'get_house_name', user_signature=True)}}";
+    var edit_assignment_url = "{{=URL('api', 'edit_assignment', user_signature=True)}}";
 
 </script>
 {{end}}
 
 <body>
-  <div id="vue-div" class="display:none">
+<div id="vue-div" class="display:none">
 
-        <button v-if="!show_form" v-on:click= "show_form=true"> Add Chore</button>
-        <div class="container form_row" v-if="show_form">
-          <div class="third">
+    <button v-if="!show_form" v-on:click="show_form=true"> Add Chore</button>
+    <div class="container" v-if="show_form">
+
+        <div class = "container">
+        <div class="third">
             Chore Name:
-          </div>
-          <div class="third">
-            <input v-model="form_title" placeholder="Enter Chore Name"/>
-            <button class="small" id="add-chore" v-on:click= "add_chore"> Submit</button>
-            <button class="small" id="add-chore" v-on:click= "show_form = false"> Cancel</button>
-          </div>
         </div>
-
-        <table class="chore_chart fill" id="chart">
-          <thead>
-            <tr><td>Chore</td><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
-            <th>Thu</th><th>Fri</th><th>Sat</th></tr>
-          </thead>
-          <tbody>
-
-            <div class="chore_list">
-                <tr v-for="chore in chore_list" v-if="chore._exist"><th v-on:click= "prompt_edit_chore_title(chore._idx)">${chore._chore_title}</th>
-                    <td v-on:click= "update_checkbox(chore._idx,0)"> <i v-if="chore._sun" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,1)"> <i v-if="chore._mon" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,2)"> <i v-if="chore._tue" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,3)"> <i v-if="chore._wed" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,4)"> <i v-if="chore._thu" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,5)"> <i v-if="chore._fri" class="fa fa-check"></i></td>
-                    <td v-on:click= "update_checkbox(chore._idx,6)"> <i v-if="chore._sat" class="fa fa-check"></i></td></tr>
-            </div>
-          </tbody>
-        </table>
-
-        <button v-on:click="clear_chart">Clear Chart</button>
-
+        <div class="third">
+            <input v-model="form_title" placeholder="Enter Chore Name"/>
+        </div>
+        </div>
+        <div class = "container">
+        <div class="third">
+            Assign To:
+        </div>
+        <div class="third">
+            <input v-model="form_assign" placeholder="Enter Person's Name"/>
+            <button class="small" id="add-chore" v-on:click="add_chore"> Submit</button>
+            <button class="small" id="add-chore" v-on:click="show_form = false"> Cancel</button>
+        </div>
+        </div>
     </div>
+
+    <table class="chore_chart fill" id="chart">
+        <thead>
+        <tr>
+            <td>Chore</td>
+            <th>Assigned</th>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <div class="chore_list">
+            <div v-if="chore_list.length ==0"> There are no weekly chores yet</div>
+            <tr v-for="chore in chore_list" v-if="chore._exist">
+                <th v-on:click="prompt_edit_chore_title(chore._idx)">${chore._chore_title}</th>
+                <td v-on:click="edit_assignment(chore._idx)"> ${chore._assigned}</td>
+                <td v-on:click="update_checkbox(chore._idx,0)"><i v-if="chore._sun" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,1)"><i v-if="chore._mon" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,2)"><i v-if="chore._tue" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,3)"><i v-if="chore._wed" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,4)"><i v-if="chore._thu" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,5)"><i v-if="chore._fri" class="fa fa-check"></i></td>
+                <td v-on:click="update_checkbox(chore._idx,6)"><i v-if="chore._sat" class="fa fa-check"></i></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+
+    <button v-on:click="clear_chart">Clear Chart</button>
+
+</div>
 
 
 </body>

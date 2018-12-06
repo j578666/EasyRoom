@@ -1,4 +1,3 @@
-// This is the js for the default/index.html view.
 var app = function() {
 
     var self = {};
@@ -25,7 +24,8 @@ var app = function() {
             // Data we are sending.
             {
                 post_title: self.vue.form_title,
-                post_content: self.vue.form_content
+                post_content: self.vue.form_content,
+                house_name: self.vue.house_name,
             },
             // What do we do when the post succeeds?
             function (data) {
@@ -42,6 +42,10 @@ var app = function() {
                     post_author: current_user,
                     down_hover: false,
                     up_hover: false,
+                    post_time: data.post_time,
+                    post_name: current_user_name,
+                    _exist: true,
+                    house_name: self.vue.house_name,
                 };
                 self.vue.post_list.unshift(new_post);
                 // We re-enumerate the array.
@@ -78,6 +82,7 @@ var app = function() {
             Vue.set(e, '_editing', false);
             Vue.set(e, '_show_reply', false);
             Vue.set(e, '_show_reply_form', false);
+            Vue.set(e, '_exist', true);
         });
     };
 
@@ -200,14 +205,14 @@ var app = function() {
             p._down = true;
             p._up = false;
             state = 'd';
-            p.thumb = 'd';
+            p.thumb = 'd'
             p._thumb_count -=2;
             p.thumb_count -=2;
         }else{
              p._down = true;
             p._up = false;
             state = 'd';
-            p.thumb = 'd';
+            p.thumb = 'd'
             p._thumb_count -=1;
             p.thumb_count -=1;
         }
@@ -247,17 +252,16 @@ var app = function() {
          p._editing = true;
     };
 
-    self.submit_post_edit = function(post_idx, title, content){
+    self.submit_post_edit = function(post_idx){
          var p = self.vue.post_list[post_idx];
          p._editing = false;
 
          $.post(set_post_url,{
-             title: title,
-             content: content,
+             title: p.post_title,
+             content: p.post_content,
              time: p.post_time,
          });
     };
-
 
     self.show_reply = function(post_idx){
          var p = self.vue.post_list[post_idx];
@@ -306,12 +310,12 @@ var app = function() {
                     post_id: p.id,
                     _editing: false,
                     reply_time:data.time,
+                    reply_name: current_user_name,
                 };
                 self.vue.reply_list.unshift(new_reply);
                 // We re-enumerate the array.
                 self.process_replies();
             });
-
     };
 
 
@@ -341,18 +345,26 @@ var app = function() {
          });
     };
 
-    self.is_logged_in = function(){
-        if(auth.user==null){
-            return false;
-        }else{
-            return true;
-        }
+        self.delete_post= function(post_idx){
+        var p = self.vue.post_list[post_idx];
+        p._exist = false;
+
+        $.post(delete_post_url,{
+             title: p.post_title,
+             content: p.post_content,
+         });
     };
 
-    self.current_user = function(){
-        if(auth.user ==null){
-            return null;
-        }else return auth.user.email
+        self.get_house_name = function(){
+        $.getJSON(get_house_name_url,
+            function(data) {
+                self.vue.house_name = data.house_name;
+                self.process_posts();
+                self.get_posts();
+                // console.log("Initial Vue House name:",self.vue.house_name);
+            }
+        );
+        //console.log("get_house_name called")
     };
 
     // Complete as needed.
@@ -367,6 +379,9 @@ var app = function() {
             show_form: false,
             reply_list: [],
             reply_content: "",
+            post_title_edit_form:"",
+            post_content_edit_form:"",
+            house_name:"",
         },
         methods: {
             add_post: self.add_post,
@@ -388,6 +403,7 @@ var app = function() {
             edit_reply: self.edit_reply,
             process_replies: self.process_replies,
             submit_reply_edit: self.submit_reply_edit,
+            delete_post: self.delete_post,
         }
 
     });
@@ -398,7 +414,7 @@ var app = function() {
     }
 
     // Gets the posts.
-    self.get_posts();
+    self.get_house_name();
 
     return self;
 };

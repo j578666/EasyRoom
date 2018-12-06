@@ -15,8 +15,7 @@ div.main_content div.form_row {
 /* line 13, ../sass/_main.scss */
 div.main_content div.post_div {
   margin: 4px;
-  border: 1px black solid;
-  background-color: #eeeeee;
+  border: 2px #a9def9 solid;
   padding: 4px;
 }
 /* line 18, ../sass/_main.scss */
@@ -33,8 +32,13 @@ div.main_content div.display_reply div.reply{
   margin-left: 50px;
   margin-right: 50px;
   padding:5px;
-  border: 1px black solid;
+  border: 2px #a9def9 solid;
 }
 div.button_pad{
 	margin: 20px;
+}
+
+div.make_bold{
+    font-weight:bold;
+
 }
