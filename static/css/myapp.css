@@ -56,3 +56,43 @@ table td
   vertical-align: middle; /* center checkbox vertically */
 
 }
+
+
+
+div.main_content div.contact_info {
+  margin:10px;
+  border: 4px #a9def9 solid;
+    padding-left: 80px;
+   background-color: #f5f5f5;
+    padding-bottom:10px;
+}
+
+@media all and (min-width:800px) {
+  .max900 {max-width:900px}
+  .quarter {width:25%; margin-right:-5px}
+  .half {width:50%; margin-right:-10px}
+  .third {width:33.33%; margin-right:-6.66px}
+  .twothirds {width:66.66%; margin-right:-13.33px}
+  .threequarters {width:75%; margin-right:-15px}
+}
+@media all and (min-width:600px) and (max-width:799px) {
+  .quarter.compressible {width:25%; margin-right:-5px}
+  .half.compressible {width:50%; margin-right:-10px}
+  .threequarters.compressible {width:75%; margin-right:-15px}
+  .quarter:not(.compressible), .half:not(.compressible), .threequarters:not(.compressible) {width:100%; margin-right:-20px}
+  .third {width:33.33%; margin-right:-6.66px}
+  .twothirds {width:66.66%; margin-right:-13.33px}
+  label.quarter:not(.compressible).right, label.half:not(.compressible).right, label.threequarters:not(.compressible).right   {float:left; text-align:left}
+}
+@media all and (max-width:599px) {
+  .quarter:not(.compressible), .half:not(.compressible), .third:not(.compressible), .twothirds:not(.compressible), .threequarters:not(.compressible) {width:100%;}
+  label.quarter:not(.compressible).right, label.half:not(.compressible).right, label.threequarters:not(.compressible).right,
+  label.third:not(.compressible).right, label.twothirds:not(.compressible).right   {float:left; text-align:left}
+  .quarter.compressible {width:25%; margin-right:-5px}
+  .half.compressible {width:50%; margin-right:-10px}
+  .third.compressible {width:33.33%; margin-right:-6.66px}
+  .twothirds.compressible {width:66.66%; margin-right:-13.33px}
+  .threequarters.compressible {width:75%; margin-right:-15px}
+}
+
+

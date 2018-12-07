@@ -2,6 +2,7 @@
 response.title='EasyRoom'
 response.subtitle='Discussion Board'
 response.intro = "This section serves as a discussion platform for the housemates."
+response.intro2 = "User can add/ edit/ delete their posts"
 }}
 
 {{extend 'layout.html'}}
@@ -68,11 +69,6 @@ response.intro = "This section serves as a discussion platform for the housemate
         <div v-if="post_list.length === 0">There are no posts.</div>
 
         <!-- We display the posts. -->
-
-
-
-
-
         <div class="post_div" v-for="post in post_list">
             <div v-if="post._exist">
                 <div class = "">${post.post_date}</div>

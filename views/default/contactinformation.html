@@ -1,7 +1,8 @@
 {{
 response.title='EasyRoom'
-response.subtitle='ContactInfo'
+response.subtitle='Contact Info'
 response.intro = "This section shows you all the other housemate information."
+response.intro2 = "User can change view/edit own profile by clicking 'profile' on the top-right corner"
 }}
 
 {{extend 'layout.html'}}
@@ -16,9 +17,9 @@ response.intro = "This section shows you all the other housemate information."
 {{end}}
 
 
-<div class ="main_content">
+<div class ="main_content contact_info">
     <div id="vue-div" class="display:none">
-    	<div class="post_div" v-for="user in user_list">
+    	<div class="contact_info" v-for="user in user_list">
     		<p><b>${user.first_name} ${user.last_name}'s profile</b></p>
             <img v-bind:src="'download/'+ user.photo" width="200px"/>
     		<p><b>House Affiliation: </b> ${user.house}</p>
