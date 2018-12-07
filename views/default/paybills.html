@@ -28,13 +28,14 @@ response.intro = "This section allows housemates to pay for rent and groceries v
             <h1>Please Login</h1>
         </div>
         
-        <div v-if="is_logged_in">
+        <div v-if="is_logged_in=='true'">
             <h2>Pay or Request Money</h2>
             <span v-for="user in user_list">
                 <button v-on:click="pay(user._idx)">Pay ${user.first_name}</button>
                 &nbsp;
             </span>
             <br>
+            <h1 v-if="user_list.length == 0"> Add more user to your house! </h1>
             <span v-for="user in user_list">
                 <button v-on:click="send_request_toggle(user._idx, user.first_name, user.email)">Request  ${user.first_name}</button>
                 &nbsp;

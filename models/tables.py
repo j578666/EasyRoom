@@ -85,4 +85,5 @@ db.define_table('payment_request',
                 Field('request_to'),
                 Field('request_person'),
                 Field('request_self'),
+                Field('request_house'),
                 )

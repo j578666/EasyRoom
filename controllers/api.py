@@ -354,6 +354,7 @@ def add_request():
         request_to=request.vars.request_to,
         request_person=request.vars.request_person,
         request_self=auth.user.first_name,
+        request_house=auth.user.HouseName,
     )
     # We return the id of the new post, so we can insert it along all the others.
     return response.json(dict(req_id=req_id, req_s=auth.user.first_name))
@@ -366,15 +367,17 @@ def get_request_list():
     else:
         rows = db().select(db.payment_request.ALL, orderby=~db.payment_request.request_time)
         for row in rows:
-            results.append(dict(
-                request_reason=row.request_reason,
-                request_amount=row.request_amount,
-                request_due=row.request_due_date,
-                request_from=row.request_from,
-                request_to=row.request_to,
-                request_person=row.request_person,
-                request_self=row.request_self,
-            ))
+            if auth.user.HouseName == row.request_house:
+                results.append(dict(
+                    request_reason=row.request_reason,
+                    request_amount=row.request_amount,
+                    request_due=row.request_due_date,
+                    request_from=row.request_from,
+                    request_to=row.request_to,
+                    request_person=row.request_person,
+                    request_self=row.request_self,
+                    request_house=row.request_house,
+                ))
     return response.json(dict(request_list=results))
 
 
